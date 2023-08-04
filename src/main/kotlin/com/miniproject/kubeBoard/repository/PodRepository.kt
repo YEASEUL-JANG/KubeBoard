@@ -1,0 +1,8 @@
+package com.miniproject.kubeBoard.repository
+
+import com.miniproject.kubeBoard.entity.PodData
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface PodRepository:JpaRepository<PodData,Long> {
+    fun save(podData: PodData)
+}
