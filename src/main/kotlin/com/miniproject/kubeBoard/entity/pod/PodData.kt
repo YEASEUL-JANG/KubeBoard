@@ -8,16 +8,16 @@ import javax.persistence.Id
 
 @Entity(name = "pod")
 class PodData (
-        private val podName: String,
-        private val namespace: String,
-        private val phase: String,
-        private val podIp: String,
-        private val createdTime: String,
-        private val nodeName: String,
-        private val labels: String,
+        val podName: String,
+        val namespace: String,
+        val phase: String,
+        val podIp: String,
+        val createdTime: String,
+        val nodeName: String,
+        val labels: String,
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private val podIdx: Long?= null,
+        val podIdx: Long?= null,
 ){
         companion object{
                 fun of(pod: Pod): PodData {

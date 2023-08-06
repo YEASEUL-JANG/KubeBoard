@@ -16,4 +16,11 @@ class PodQuerydslRepository (
                 .limit(sublist.toLong())
                 .fetch()
     }
+
+    fun getPod(name: String): PodData? {
+        return queryFactory.select(podData)
+                .from(podData)
+                .where(podData.podName.eq(name))
+                .fetchOne()
+    }
 }

@@ -1,7 +1,6 @@
 package com.miniproject.kubeBoard.service
 
 import com.miniproject.kubeBoard.client.PodClient
-import com.miniproject.kubeBoard.entity.pod.PodData
 import com.miniproject.kubeBoard.entity.pod.res.PodListResponse
 import com.miniproject.kubeBoard.repository.PodQuerydslRepository
 //import com.miniproject.kubeBoard.repository.PodQuerydslRepository
@@ -28,6 +27,11 @@ class PodService (
         val count = podRepository.findAll().size
         val podList = podQuerydslRepository.getPodList(offset, sublist)
         return PodListResponse(count,podList)
+    }
+
+    fun getPod(name: String): PodListResponse {
+        val pod = podQuerydslRepository.getPod(name)
+        return PodListResponse(1, listOf(pod))
     }
 
 }
