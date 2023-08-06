@@ -23,7 +23,7 @@ class PodService (
         podRepository.saveAll(podList)
     }
 
-    fun getPodList(offset: Int, sublist: Int):PodListResponse {
+    fun getPodList(offset: Int, sublist: Int): PodListResponse {
         val count = podRepository.findAll().size
         val podList = podQuerydslRepository.getPodList(offset, sublist)
         return PodListResponse(count,podList)

@@ -1,5 +1,7 @@
 package com.miniproject.kubeBoard.entity.pod
 
+import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.fabric8.kubernetes.api.model.Pod
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -28,8 +30,18 @@ class PodData (
                                 podIp = pod.status.podIP,
                                 createdTime = pod.metadata.creationTimestamp,
                                 nodeName = pod.spec.nodeName,
-                                labels = pod.metadata.labels.toString(),
+                                labels = getLabel(pod.metadata.labels),
                         )
+                }
+
+                private fun getLabel(labels: Map<String, String>): String {
+                        val objectMapper = ObjectMapper()
+                        try{
+                               return objectMapper.writeValueAsString(labels)
+                        }catch (e:JsonProcessingException){
+                               e.printStackTrace()
+                        }
+                        return ""
                 }
         }
 }
