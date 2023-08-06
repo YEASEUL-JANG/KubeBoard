@@ -1,6 +1,6 @@
 package com.miniproject.kubeBoard.client
 
-import com.miniproject.kubeBoard.entity.PodData
+import com.miniproject.kubeBoard.entity.pod.PodData
 import io.fabric8.kubernetes.client.KubernetesClient
 import org.springframework.stereotype.Service
 

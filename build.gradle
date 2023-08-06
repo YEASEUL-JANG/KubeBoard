@@ -44,6 +44,14 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+sourceSets {
+	main {
+		java {
+			srcDirs = ["src/main/kotlin", "build/generated/source/kapt/main"]
+		}
+	}
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

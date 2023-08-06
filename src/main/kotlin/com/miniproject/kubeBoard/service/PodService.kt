@@ -1,10 +1,11 @@
 package com.miniproject.kubeBoard.service
 
 import com.miniproject.kubeBoard.client.PodClient
-import com.miniproject.kubeBoard.entity.PodData
+import com.miniproject.kubeBoard.entity.pod.PodData
+import com.miniproject.kubeBoard.entity.pod.res.PodListResponse
+import com.miniproject.kubeBoard.repository.PodQuerydslRepository
+//import com.miniproject.kubeBoard.repository.PodQuerydslRepository
 import com.miniproject.kubeBoard.repository.PodRepository
-import io.fabric8.kubernetes.client.KubernetesClient
-import io.fabric8.kubernetes.client.KubernetesClientBuilder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 class PodService (
         private val podRepository: PodRepository,
         private val podClient: PodClient,
+        private val podQuerydslRepository: PodQuerydslRepository,
 ){
     @Transactional
     fun syncPodList(){
@@ -20,6 +22,12 @@ class PodService (
         //동기화해온 리스트 저장
         val podList= podClient.getPodList()
         podRepository.saveAll(podList)
+    }
+
+    fun getPodList(offset: Int, sublist: Int):PodListResponse {
+        val count = podRepository.findAll().size
+        val podList = podQuerydslRepository.getPodList(offset, sublist)
+        return PodListResponse(count,podList)
     }
 
 }

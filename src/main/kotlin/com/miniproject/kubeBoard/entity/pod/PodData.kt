@@ -1,4 +1,4 @@
-package com.miniproject.kubeBoard.entity
+package com.miniproject.kubeBoard.entity.pod
 
 import io.fabric8.kubernetes.api.model.Pod
 import javax.persistence.Entity

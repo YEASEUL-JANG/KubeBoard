@@ -1,6 +1,6 @@
 package com.miniproject.kubeBoard.repository
 
-import com.miniproject.kubeBoard.entity.PodData
+import com.miniproject.kubeBoard.entity.pod.PodData
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface PodRepository:JpaRepository<PodData,Long> {
