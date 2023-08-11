@@ -56,8 +56,8 @@
 </template>
 
 <script>
-import Pagination from '@/components/Pagination.vue';
-import LabelList from './LabelList.vue';
+import Pagination from '@/components/common/Pagination.vue';
+import LabelList from '../common/LabelList.vue';
 import { provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";

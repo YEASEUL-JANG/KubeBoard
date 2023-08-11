@@ -22,7 +22,15 @@ class PodController (
     }
 
     /**
-     * Pod 전체 목록리스트
+     * Pod 전체 데이터
+     */
+    @GetMapping("/listall")
+    fun getPodListAll(): PodListResponse {
+        return podService.getPodListAll()
+    }
+
+    /**
+     * Pod 목록 데이터
      */
     @GetMapping("/list")
     fun getPodList(

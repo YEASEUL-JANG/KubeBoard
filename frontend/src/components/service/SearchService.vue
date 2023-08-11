@@ -59,7 +59,7 @@
 
 <script>
 import TableSlot from '@/layout/TableSlot.vue'
-import LabelList from "@/components/LabelList.vue";
+import LabelList from "@/components/common/LabelList.vue";
 
 export default {
   components: { TableSlot, LabelList },

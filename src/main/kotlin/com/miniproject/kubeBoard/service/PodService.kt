@@ -34,4 +34,9 @@ class PodService (
         return PodListResponse(1, listOf(pod))
     }
 
+    fun getPodListAll(): PodListResponse {
+        val podList = podRepository.findAll()
+        return PodListResponse(podList.size,podList);
+    }
+
 }

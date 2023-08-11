@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import SearchService from '@/components/SearchService.vue';
-import SearchPod from '@/components/SearchPod.vue';
-import SearchDepl from '@/components/SearchDepl.vue';
+import SearchService from '@/components/service/SearchService.vue';
+import SearchPod from '@/components/pod/SearchPod.vue';
+import SearchDepl from '@/components/deployment/SearchDepl.vue';
 
 export default {
     components:{

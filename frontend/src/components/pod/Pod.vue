@@ -47,8 +47,8 @@
 import axios from "axios";
 import {computed, onMounted, provide, ref} from "vue";
 import { useRouter } from 'vue-router';
-import LabelList from './LabelList.vue';
-import Pagination from "@/components/Pagination.vue";
+import LabelList from '../common/LabelList.vue';
+import Pagination from "@/components/common/Pagination.vue";
 export default {
   components: {
       Pagination,
@@ -77,7 +77,7 @@ export default {
             currentPage.value = page;
             try {
                 const {data} = await axios.get(
-                    `http://localhost:8080/v1/pod/list?page=${currentPage.value}`);
+                    `/pod/list?page=${currentPage.value}`);
                 console.log("podlist:"+data)
                 items.value = data.list;
                 numberOflist.value = data.count;

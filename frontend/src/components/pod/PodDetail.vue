@@ -86,8 +86,8 @@
   </div>
 </template>
 <script>
-import Pagination from '@/components/Pagination.vue';
-import LabelList from './LabelList.vue';
+import Pagination from '@/components/common/Pagination.vue';
+import LabelList from '../common/LabelList.vue';
 import BaseSpinner from '@/ui/BaseSpinner.vue';
 
 export default {

@@ -73,8 +73,8 @@ import axios from "axios";
 import { ref, computed, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import {useRouter} from 'vue-router';
-import LabelList from "@/components/LabelList.vue";
-import DeployPagination from "@/components/Pagination.vue";
+import LabelList from "@/components/common/LabelList.vue";
+import DeployPagination from "@/components/common/Pagination.vue";
 
 export default {
   components: { DeployPagination, LabelList },

@@ -1,6 +1,6 @@
 <template>
     <div class="intro">
-    <img src="../assets/images/logo-icon.png" style="float:left;"/>
+    <img src="../../assets/images/logo-icon.png" style="float:left;"/>
     <div class="title">
     
         <TextAnime />
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import TextAnime from './TextAnime.vue';
+import TextAnime from '../common/TextAnime.vue';
 
 
 export default {

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import LabelList from "@/components/LabelList.vue";
+import LabelList from "@/components/common/LabelList.vue";
 
 export default {
   components: {

@@ -1,17 +1,17 @@
 import { createWebHistory, createRouter } from "vue-router";
-import ServiceList from "./components/ServiceList.vue";
-import ServiceView from "./components/ServiceView.vue";
-import Introduction from "./components/Introduction.vue";
-import Deployment from "./components/Deployment.vue";
-import DeploymentDetail from "./components/DeploymentDetail.vue";
-import Pod from "./components/Pod.vue";
-import PodDetail from "./components/PodDetail.vue";
-import MainPage from "./components/MainPage.vue";
-import LoginView from "@/components/LoginView.vue";
-import JoinView from "@/components/JoinView.vue";
+import ServiceList from "./components/service/ServiceList.vue";
+import ServiceView from "./components/service/ServiceView.vue";
+import Introduction from "./components/main/Introduction.vue";
+import Deployment from "./components/deployment/Deployment.vue";
+import DeploymentDetail from "./components/deployment/DeploymentDetail.vue";
+import Pod from "./components/pod/Pod.vue";
+import PodDetail from "./components/pod/PodDetail.vue";
+import MainPage from "@/page/MainPage.vue";
+import LoginView from "@/page/LoginView.vue";
+import JoinView from "@/page/JoinView.vue";
 //import store from "@/store/store";
-import NotFound from "@/components/NotFound.vue";
-import SearchPage from "./components/SearchPage.vue";
+import NotFound from "@/components/common/NotFound.vue";
+import SearchPage from "@/page/SearchPage.vue";
 
 const routes = [
     { path: "/", name: 'mainPage', component: MainPage, meta: {auth: true} },
