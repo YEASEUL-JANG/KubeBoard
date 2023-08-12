@@ -5,6 +5,7 @@ import com.miniproject.kubeBoard.entity.pod.res.PodListResponse
 import com.miniproject.kubeBoard.repository.PodQuerydslRepository
 //import com.miniproject.kubeBoard.repository.PodQuerydslRepository
 import com.miniproject.kubeBoard.repository.PodRepository
+import io.fabric8.kubernetes.api.model.Pod
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -37,6 +38,10 @@ class PodService (
     fun getPodListAll(): PodListResponse {
         val podList = podRepository.findAll()
         return PodListResponse(podList.size,podList);
+    }
+
+    fun getPodClientList(): MutableList<Pod>? {
+        return podClient.getPodClientList()
     }
 
 }

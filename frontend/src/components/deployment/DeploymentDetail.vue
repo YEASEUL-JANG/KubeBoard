@@ -119,14 +119,14 @@ export default {
     getdepl();
 
     //데이터 reload
-    var i =0;
-    var reload = setInterval(() => {
-      getdepl(currentPage.value);
-      i++;
-      if(i == 5){
-        clearInterval(reload);
-      }
-    }, 3000);
+    // var i =0;
+    // var reload = setInterval(() => {
+    //   getdepl(currentPage.value);
+    //   i++;
+    //   if(i == 5){
+    //     clearInterval(reload);
+    //   }
+    // }, 3000);
   //페이지 이동
     const moveList = () =>{
       router.push('/deployment');

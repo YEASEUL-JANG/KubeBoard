@@ -92,12 +92,6 @@ export default {
             setLoading();
         })
         /**
-         * 페이지 2초단위로 업데이트
-         */
-        var reload = setInterval(async() => {
-            await getPodList(currentPage.value);
-        }, 3000);
-        /**
          * Pod 상세조회
          */
         const poddetail = (name) => {
@@ -106,7 +100,7 @@ export default {
 
 
         return {
-            items,poddetail,numberOfPages,reload,getPodList,currentPage
+            items,poddetail,numberOfPages,getPodList,currentPage
 
         }
     }

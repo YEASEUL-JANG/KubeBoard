@@ -1,6 +1,7 @@
 package com.miniproject.kubeBoard.client
 
 import com.miniproject.kubeBoard.entity.pod.PodData
+import io.fabric8.kubernetes.api.model.Pod
 import io.fabric8.kubernetes.client.KubernetesClient
 import org.springframework.stereotype.Service
 
@@ -17,5 +18,8 @@ class PodClient(
             }
         }
         return podList
+    }
+    fun getPodClientList(): MutableList<Pod>? {
+        return client.pods()?.list()?.items
     }
 }

@@ -2,6 +2,7 @@ package com.miniproject.kubeBoard.controller
 
 import com.miniproject.kubeBoard.entity.pod.res.PodListResponse
 import com.miniproject.kubeBoard.service.PodService
+import io.fabric8.kubernetes.api.model.Pod
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,6 +14,14 @@ import org.springframework.web.bind.annotation.RestController
 class PodController (
         private val podService: PodService
 ){
+    /**
+     * pod 목록 (client API)
+     */
+    @GetMapping("/client/list")
+    fun getPodClientList(): MutableList<Pod>? {
+        return podService.getPodClientList()
+    }
+
     /**
      * Pod 동기화 (30초단위 update)
      */
