@@ -7,11 +7,10 @@
         <tr>
           <th>이름</th>
           <th>네임스페이스</th>
-          <th>이미지</th>
           <th>레이블</th>
           <th>상태(준비/생성)</th>
           <th>생성시간</th>
-          <th>데이터 기록</th>
+          <th>상세</th>
           <th>스케일</th>
         </tr>
         </thead>
@@ -20,14 +19,12 @@
           <td colspan="8"><h5>표시할 데이터가 없습니다.</h5></td>
         </tr>
         <tr v-for="(item,index) in items" :key="index">
-          <td>{{ item.name }}</td>
+          <td>{{ item.deploymentName }}</td>
           <td>{{ item.namespace }}</td>
-          <td>{{ item.image }}</td>
           <td>
             <label-list :labels="JSON.parse(item.labels)"></label-list>
           </td>
-          <td>{{ item.readyReplicas }}/{{ item.replicas }}</td>
-          <td v-show="false"></td>
+          <td>{{ item.readyReplicas }}/{{ item.replicaCount }}</td>
           <td>{{ item.createdTime }}</td>
           <td>
             <button type="button" class="btn btn-secondary btn-sm" @click="deploymentdetail(item.name)">조회</button>
@@ -35,7 +32,7 @@
           <td>
             <button type="button" class="btn btn-outline-secondary btn-sm"
                     @click="openmodal(index)">
-              <i class="bi bi-three-dots-vertical"></i>
+              스케일
             </button>
           </td>
         </tr>
@@ -90,8 +87,8 @@ export default {
     const openmodal = (index) => {
       showmodal.value = true;
       currentnamespace.value = items.value[index].namespace;
-      currentreplica.value = items.value[index].replicas;
-      currentdeployment.value = items.value[index].name;
+      currentreplica.value = items.value[index].replicaCount;
+      currentdeployment.value = items.value[index].deploymentName;
     }
 
     //모달닫기
@@ -141,7 +138,7 @@ export default {
             `/deployment/list?page=${currentPage.value}`);
         items.value = data.list;
         for(let item of data.list){
-          if(item.readyReplicas != item.replicas){
+          if(item.readyReplicas != item.replicaCount){
             update.value = true;
             break;
           }
