@@ -2,9 +2,8 @@ package com.miniproject.kubeBoard.service
 
 import com.miniproject.kubeBoard.client.PodClient
 import com.miniproject.kubeBoard.entity.pod.res.PodListResponse
-import com.miniproject.kubeBoard.repository.PodQuerydslRepository
-//import com.miniproject.kubeBoard.repository.PodQuerydslRepository
-import com.miniproject.kubeBoard.repository.PodRepository
+import com.miniproject.kubeBoard.repository.pod.PodQuerydslRepository
+import com.miniproject.kubeBoard.repository.pod.PodRepository
 import io.fabric8.kubernetes.api.model.Pod
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

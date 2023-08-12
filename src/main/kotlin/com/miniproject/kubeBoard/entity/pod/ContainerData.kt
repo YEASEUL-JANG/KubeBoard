@@ -1,7 +1,6 @@
-package com.miniproject.kubeBoard.entity
+package com.miniproject.kubeBoard.entity.pod
 
 import com.fasterxml.jackson.annotation.JsonBackReference
-import com.miniproject.kubeBoard.entity.pod.PodData
 import io.fabric8.kubernetes.api.model.Container
 import io.fabric8.kubernetes.api.model.ContainerStatus
 import javax.persistence.*
@@ -24,7 +23,7 @@ class ContainerData(
 
 ) {
     companion object{
-        fun of(container: Container, status: ContainerStatus, podData: PodData):ContainerData{
+        fun of(container: Container, status: ContainerStatus, podData: PodData): ContainerData {
             return ContainerData(
                     containerName = container.name,
                     containerImage = container.image,

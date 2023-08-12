@@ -1,4 +1,4 @@
-package com.miniproject.kubeBoard.repository
+package com.miniproject.kubeBoard.repository.pod
 
 import com.miniproject.kubeBoard.entity.pod.PodData
 import org.springframework.data.jpa.repository.JpaRepository

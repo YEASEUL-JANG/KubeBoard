@@ -50,6 +50,9 @@ class PodController (
         return podService.getPodList(offset,sublist)
     }
 
+    /**
+     * Pod 상세 데이터
+     */
     @GetMapping("/list/{name}")
     fun getPod(
             @PathVariable("name") name:String,
