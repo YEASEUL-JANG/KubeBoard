@@ -63,4 +63,15 @@ class DeploymentController (
         return deploymentService.getDeployment(name)
 
     }
+    @GetMapping("/scale")
+    fun getDeploymentScale(
+            @RequestParam("name") name: String,
+            @RequestParam("namespace") namespace: String,
+            @RequestParam("scale") scale: Int,
+    ):Int{
+        return if(!name.equals("")&& !namespace.equals("") && scale!=0){
+            deploymentService.changeReplica(name,namespace,scale)
+            1;
+        }else 0;
+    }
 }

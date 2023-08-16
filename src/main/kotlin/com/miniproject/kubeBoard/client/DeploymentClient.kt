@@ -23,5 +23,14 @@ class DeploymentClient(
     }
     fun getDeploymentClientList(): MutableList<Deployment>? {
         return client.apps().deployments()?.list()?.items
+
+    }
+
+    fun changeReplica(name: String, namespace: String, scale: Int) {
+        try{
+            client.apps().deployments().inNamespace(namespace).withName(name).scale(scale)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
     }
 }

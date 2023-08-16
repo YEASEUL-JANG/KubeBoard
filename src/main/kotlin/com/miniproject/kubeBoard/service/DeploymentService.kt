@@ -43,5 +43,9 @@ class DeploymentService (
         return deploymentClient.getDeploymentClientList()
     }
 
+    fun changeReplica(name: String, namespace: String, scale: Int) {
+        deploymentClient.changeReplica(name, namespace, scale);
+    }
+
 
 }

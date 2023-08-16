@@ -2,7 +2,6 @@ package com.miniproject.kubeBoard.entity.deployment
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.miniproject.kubeBoard.service.CommonService
-import io.fabric8.kubernetes.api.model.IntOrString
 import io.fabric8.kubernetes.api.model.apps.Deployment
 import javax.persistence.*
 
@@ -21,8 +20,8 @@ class DeploymentData(
         val strategySelector: String,
         val revisionHistoryLimit: Int,//리비전 내역 한도
         //rollingUpdate
-        val maxSurge: IntOrString,//최대 증가율(surge)
-        val maxUnavilable: IntOrString,//최대 비가용
+        val maxSurge: String,//최대 증가율(surge)
+        val maxUnavilable: String,//최대 비가용
 
         @OneToMany(mappedBy = "deploymentData", cascade = [CascadeType.ALL], orphanRemoval = true)
         @JsonManagedReference
@@ -47,8 +46,8 @@ class DeploymentData(
                     strategySelector = CommonService.getLabel(deployment.spec.selector.matchLabels),
                     revisionHistoryLimit = deployment.spec.revisionHistoryLimit,
                     annotation = CommonService.getLabel(deployment.metadata.annotations),
-                    maxSurge = deployment.spec.strategy.rollingUpdate.maxSurge,
-                    maxUnavilable = deployment.spec.strategy.rollingUpdate.maxUnavailable,
+                    maxSurge = deployment.spec.strategy.rollingUpdate.maxSurge.value.toString(),
+                    maxUnavilable = deployment.spec.strategy.rollingUpdate.maxUnavailable.value.toString(),
                     availableReplicas = deployment.status.availableReplicas,
                     )
             deploymentData.deploymentConditions.addAll(getDeploymentConditions(deployment,deploymentData))
