@@ -49,7 +49,7 @@
                        :currentreplica="currentreplica"
                        :currentdeployment="currentdeployment"
                        :currentnamespace="currentnamespace"
-                       @changereplica="changereplica"
+                       @changeReplica="changeReplica"
                        @close="closeModal"/>
     </teleport>
   </div>
@@ -106,23 +106,22 @@ export default {
     provide('setLoading', setLoading);
 
     //레플리카 수정
-    const changereplica = async (setreplica) => {
+    const changeReplica = async (setreplica) => {
       const name = currentdeployment.value;
       const namespace = currentnamespace.value;
       try {
         const { data } = await axios.get(
             `/deployment/scale?name=${ name }&namespace=${ namespace }&scale=${ setreplica }`);
 
-        if (data == 1) {
+        if (data === 1) {
           closeModal();
-          if (currentPage.value == 1) {
-            router.go(0);
-          }
-          var reload = setInterval(async () => {
-            await getdepl(currentPage.value);
-            //update값이 모두 false이면
-            if(!update.value){
+          var reload = setInterval( async () => {
+            await getUpdate()
+            //update값이 모두 false이면(업데이트 완료)
+              console.log("getDepl완료, update 상태 : ",update.value)
+              if(!update.value){
               clearInterval(reload);
+
             }
           }, 2000);
         }
@@ -130,6 +129,20 @@ export default {
         console.log(err);
       }
     }
+      //데이터 불러오기
+      const getUpdate = async () => {
+          try {
+              const result = await axios.get(
+                  `/deployment/batch`);
+             if(result.status===200){
+                 await getdepl(currentPage.value);
+             }
+          } catch (err) {
+              console.log(err);
+          }
+      };
+
+
     //데이터 불러오기
     const getdepl = async (page = currentPage.value) => {
       currentPage.value = page;
@@ -138,7 +151,8 @@ export default {
             `/deployment/list?page=${currentPage.value}`);
         items.value = data.list;
         for(let item of data.list){
-          if(item.readyReplicas != item.replicaCount){
+            console.log("readyReplicas, replicaCount",item.readyReplicas,item.replicaCount)
+          if(item.readyReplicas !== item.replicaCount){ // 업데이트 중이면
             update.value = true;
             break;
           }
@@ -155,13 +169,13 @@ export default {
     setLoading();
     getdepl();
     //페이지 reload
-    var reload = setInterval(async() => {
-      await getdepl(currentPage.value);
-      //update값이 모두 false이면
-      if(!update.value){
-        clearInterval(reload);
-      }
-    }, 2000);
+    // var reload = setInterval(async() => {
+    //   await getdepl(currentPage.value);
+    //   //update값이 모두 false이면
+    //   if(!update.value){
+    //     clearInterval(reload);
+    //   }
+    // }, 2000);
 
     //디플로이먼트 데이터 페이지 이동
     const deploymentdetail = (name) => {
@@ -170,7 +184,7 @@ export default {
 
     return {
       items, deploymentdetail, getdepl, showmodal, currentreplica, currentdeployment,
-      currentPage, numberOfPages, changereplica, openmodal, closeModal, currentnamespace, isLoading, setLoading
+      currentPage, numberOfPages, changeReplica, openmodal, closeModal, currentnamespace, isLoading, setLoading
     }
   }
 }

@@ -23,7 +23,6 @@ class DeploymentClient(
     }
     fun getDeploymentClientList(): MutableList<Deployment>? {
         return client.apps().deployments()?.list()?.items
-
     }
 
     fun changeReplica(name: String, namespace: String, scale: Int) {

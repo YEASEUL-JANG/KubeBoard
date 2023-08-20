@@ -22,7 +22,7 @@
             </span>
             <hr/>
             <div align="right">
-            <button type="button" class="btn btn-outline-secondary" @click="changereplica" >스케일</button>
+            <button type="button" class="btn btn-outline-secondary" @click="changeReplica" >스케일</button>
             <button type="button" class="btn btn-secondary ms-lg-3" @click="onclose">취소</button>
             </div>
         </div>
@@ -36,14 +36,14 @@
         setup(props,{emit}){
             const setreplica = ref(props.currentreplica);
 
-            const changereplica = ()=>{
-                emit('changereplica',setreplica.value);
+            const changeReplica = ()=>{
+                emit('changeReplica',setreplica.value);
             };
             const onclose = () =>{
                 emit('close');
             }
             return{
-                changereplica,setreplica,onclose
+                changeReplica,setreplica,onclose
             };
         }
     }
