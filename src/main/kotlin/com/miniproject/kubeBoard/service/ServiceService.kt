@@ -14,8 +14,8 @@ class ServiceService (
         private val serviceQuerydslRepository: ServiceQuerydslRepository,
 ){
     @Transactional
-    fun syncDeploymentList(){
-        //기존 DeploymentList 전체 삭제
+    fun syncServiceList(){
+        //기존 Service 전체 삭제
         serviceRepository.deleteAll()
         //동기화해온 리스트 저장
         val serviceList= serviceClient.getServiceList()

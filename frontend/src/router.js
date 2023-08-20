@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
-import ServiceList from "./components/service/ServiceList.vue";
-import ServiceView from "./components/service/ServiceView.vue";
+import ServiceList from "./components/service/Service.vue";
+import ServiceView from "./components/service/ServiceDetail.vue";
 import Introduction from "./components/main/Introduction.vue";
 import Deployment from "./components/deployment/Deployment.vue";
 import DeploymentDetail from "./components/deployment/DeploymentDetail.vue";

@@ -21,7 +21,7 @@ class ServiceController (
         private val serviceService: ServiceService
 ){
     /**
-     * (client API) deployment 목록
+     * (client API) service 목록
      */
     @GetMapping("/client/list")
     fun getServiceClientList(): MutableList<Service>? {
@@ -29,11 +29,11 @@ class ServiceController (
     }
 
     /**
-     * deployment 동기화 (30초단위 update)
+     * service 동기화 (30초단위 update)
      */
     @GetMapping("/batch")
-    fun syncDeploymentList(){
-        serviceService.syncDeploymentList()
+    fun syncServiceList(){
+        serviceService.syncServiceList()
     }
 
     /**
@@ -44,25 +44,25 @@ class ServiceController (
         return serviceService.getServiceListAll()
     }
 
-//    /**
-//     * deployment 목록 데이터
-//     */
-//    @GetMapping("/list")
-//    fun getDeploymentList(
-//            @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
-//    ): ServiceListResponse {
-//        val offset= (page-1)*5
-//        val sublist=5*page
-//        return serviceService.getServiceList(offset,sublist)
-//    }
-//
-//    /**
-//     * deployment 상세 데이터
-//     */
-//    @GetMapping("/list/{name}")
-//    fun getPod(
-//            @PathVariable("name") name:String,
-//    ): DeploymentListResponse {
-//        return serviceService.getService(name)
-//    }
+    /**
+     * service 목록 데이터
+     */
+    @GetMapping("/list")
+    fun getServiceList(
+            @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
+    ): ServiceListResponse {
+        val offset= (page-1)*5
+        val sublist=5*page
+        return serviceService.getServiceList(offset,sublist)
+    }
+
+    /**
+     * service 상세 데이터
+     */
+    @GetMapping("/list/{name}")
+    fun getService(
+            @PathVariable("name") name:String,
+    ): ServiceListResponse {
+        return serviceService.getService(name)
+    }
 }
