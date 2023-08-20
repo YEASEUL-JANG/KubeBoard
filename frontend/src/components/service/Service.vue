@@ -43,60 +43,67 @@
 </template>
 
 <script>
+import { ref, onMounted, computed } from "vue";
 import LabelList from "@/components/common/LabelList.vue";
 
 export default {
-  components: {
-    LabelList,
-  },
-  name: "ServiceList",
-  data() {
-    return {
-      items: [],
-      pageNum: 1,
-      pageSize: 5,
-      isLoading: true
-    };
-  },
-  created() {
-    this.getServiceDB();
-  },
-  computed: {
-    pageCount() {
-      const listLeng = this.items.length;
-      const listSize = this.pageSize;
-      let page = Math.floor(listLeng / listSize);
-      if (listLeng % listSize > 0) page += 1;
+    name: "ServiceList",
+    components: {
+        LabelList,
+    },
+    setup() {
+        const items = ref([]);
+        const pageNum = ref(1);
+        const pageSize = ref(5);
+        const isLoading = ref(true);
 
-      return page;
-    },
+        const getServiceDB = async () => {
+            isLoading.value = true;
+            try {
+                const response = await this.$axios.get("/api/service/list");
+                console.log(response.data);
+                items.value = response.data;
+            } finally {
+                isLoading.value = false;
+            }
+        };
 
-    paginatedData() {
-      const start = (this.pageNum - 1) * this.pageSize;
-      const end = start + this.pageSize;
-      console.log(start, end);
-      return this.items.slice(start, end);
+        const pageCount = computed(() => {
+            const listLeng = items.value.length;
+            const listSize = pageSize.value;
+            let page = Math.floor(listLeng / listSize);
+            if (listLeng % listSize > 0) page += 1;
+            return page;
+        });
+
+        const paginatedData = computed(() => {
+            const start = (pageNum.value - 1) * pageSize.value;
+            const end = start + pageSize.value;
+            console.log(start, end);
+            return items.value.slice(start, end);
+        });
+
+        const changePage = (newPageNum) => {
+            pageNum.value = newPageNum;
+        };
+
+        onMounted(() => {
+            getServiceDB();
+        });
+
+        return {
+            items,
+            pageNum,
+            pageSize,
+            isLoading,
+            pageCount,
+            paginatedData,
+            changePage
+        };
     },
-  },
-  methods: {
-    async getServiceDB() {
-      this.isLoading = true;
-      this.items = await this.$axios
-          .get("/api/service/list")
-          .then(function (response) {
-            console.log((response.data));
-            return response.data;
-          });
-      // this.paginatedData;
-      this.isLoading = false;
-    },
-    changePage(pageNum) {
-      this.pageNum = pageNum;
-      // this.paginatedData;
-    },
-  },
 };
 </script>
+
 
 <style>
 #app {
