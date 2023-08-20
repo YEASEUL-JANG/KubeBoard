@@ -5,105 +5,149 @@
             @click="moveList">
       <i class="bi bi-chevron-double-left"></i> List</button>
     </div>
-    <table-slot header="실시간 정보">
+    <table-slot header="메타데이터">
       <base-spinner v-if="isLoading"></base-spinner>
       <table v-else>
       <thead>
       <tr>
         <th>이름</th>
         <th>네임스페이스</th>
-        <th>이미지</th>
         <th>레이블</th>
-        <th>상태(준비/생성)</th>
         <th>생성시간</th>
+        <th>uid</th>
+        <th>어노테이션</th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(item,index) in currentdepl" :key="index">
-        <td>{{ item.name }}</td>
-        <td>{{ item.namespace }}</td>
-        <td>{{ item.image }}</td>
+      <tr>
+        <td>{{ currentdepl.deploymentName }}</td>
+        <td>{{ currentdepl.namespace }}</td>
         <td>
-          <label-list :labels="JSON.parse(item.labels)"></label-list>
+          <label-list :labels="JSON.parse(currentdepl.labels)"></label-list>
         </td>
-        <td>{{ item.readyReplicas }}/{{ item.replicas }}</td>
-        <td>{{ item.createdTime }}</td>
+        <td>{{ currentdepl.createdTime }}</td>
+        <td>{{ currentdepl.uid }}</td>
+        <td>
+            <label-list :labels="JSON.parse(currentdepl.annotation)"></label-list>
+        </td>
       </tr>
       </tbody>
       </table>
     </table-slot>
 
-    <table-slot header="업데이트 내역">
+    <table-slot header="리소스 정보">
       <base-spinner v-if="isLoading"></base-spinner>
       <table v-else>
       <thead>
       <tr>
-        <th>이름</th>
-        <th>이미지</th>
-        <th>레이블</th>
-        <th>상태(준비/생성)</th>
-        <th>생성시간</th>
-        <th>업데이트 시간</th>
+        <th>전략</th>
+        <th>리비전 내역 한도</th>
+        <th>Selector</th>
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(item,index) in depllist" :key="index">
-        <td>{{ item.name }}</td>
-        <td>{{ item.image }}</td>
+      <tr>
+        <td>{{ currentdepl.strategyType }}</td>
+        <td>{{ currentdepl.revisionHistoryLimit }}</td>
         <td>
-          <label-list :labels="JSON.parse(item.labels)"></label-list>
+          <label-list :labels="JSON.parse(currentdepl.strategySelector)"></label-list>
         </td>
-        <td>{{ item.readyReplicas }}/{{ item.replicas }}</td>
-        <td>{{ item.createdTime }}</td>
-        <td>{{ item.writeTime }}</td>
       </tr>
       </tbody>
       </table>
-      <template v-slot:pageSlot>
-        <DeployPagination :currentPage="currentPage"
-                          :numberOfPages="numberOfPages"
-                          @getdepl="getdepl"/>
-      </template>
     </table-slot>
+
+
+      <table-slot header="롤링 업데이트 정책">
+          <base-spinner v-if="isLoading"></base-spinner>
+          <table v-else>
+              <thead>
+              <tr>
+                  <th>최대 증가율(surge)</th>
+                  <th>최대 비가용</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                  <td>{{ currentdepl.maxSurge }}</td>
+                  <td>{{ currentdepl.maxUnavilable }}</td>
+              </tr>
+              </tbody>
+          </table>
+      </table-slot>
+
+      <table-slot header="파드 상태">
+          <base-spinner v-if="isLoading"></base-spinner>
+          <table v-else>
+              <thead>
+              <tr>
+                  <th>Ready</th>
+                  <th>Total</th>
+                  <th>Available</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                  <td>{{ currentdepl.readyReplicas }}</td>
+                  <td>{{ currentdepl.replicaCount }}</td>
+                  <td>{{ currentdepl.availableReplicas }}</td>
+              </tr>
+              </tbody>
+          </table>
+      </table-slot>
+
+      <table-slot header="Condition">
+          <base-spinner v-if="isLoading"></base-spinner>
+          <table v-else>
+              <thead>
+              <tr>
+                  <th>타입</th>
+                  <th>상태</th>
+                  <th>트랜지션 시간</th>
+                  <th>이유</th>
+                  <th>메시지</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(item,index) in currentdepl.deploymentConditions" :key="index">
+                  <td>{{ item.type }}</td>
+                  <td>{{ item.status }}</td>
+                  <td>{{ item.lastTransitionTime }}</td>
+                  <td>{{ item.reason }}</td>
+                  <td>{{ item.message }}</td>
+              </tr>
+              </tbody>
+          </table>
+      </table-slot>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { ref, computed, provide } from 'vue';
+import { ref, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import {useRouter} from 'vue-router';
 import LabelList from "@/components/common/LabelList.vue";
-import DeployPagination from "@/components/common/Pagination.vue";
 
 export default {
-  components: { DeployPagination, LabelList },
+  components: {LabelList },
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const depllist = ref([]);
     const currentdepl = ref([]);
     const name = route.params.name;
-    const limit = 5;
-    const currentPage = ref(1);
     const numberOflist = ref(0);
     const isLoading = ref(false);
 
-    //총 페이지 수 계산
-    const numberOfPages = computed(() => {
-      return Math.ceil((numberOflist.value / limit));
-    });
 
-    const getdepl = async (page = currentPage.value) => {
-      currentPage.value = page;
-      const offset = (currentPage.value - 1) * limit;
+    const getdepl = async () => {
       try {
         const { data } = await axios.get(
-            `/deployment/${ name }?offset=${ offset }&limit=${ limit }`
+            `/deployment/list/${ name }`
         );
+        console.log(data);
         numberOflist.value = data.count;
-        depllist.value = data.depllist;
-        currentdepl.value = data.currentdepl;
+        currentdepl.value = data.list[0];
       } catch (err) {
         console.log(err);
       } finally {
@@ -118,22 +162,13 @@ export default {
     setLoading();
     getdepl();
 
-    //데이터 reload
-    // var i =0;
-    // var reload = setInterval(() => {
-    //   getdepl(currentPage.value);
-    //   i++;
-    //   if(i == 5){
-    //     clearInterval(reload);
-    //   }
-    // }, 3000);
   //페이지 이동
     const moveList = () =>{
       router.push('/deployment');
     }
     return {
-      depllist, currentdepl, numberOflist,moveList,
-      numberOfPages, getdepl, currentPage, isLoading, setLoading
+      currentdepl, numberOflist ,moveList,
+      getdepl, isLoading, setLoading
     };
   }
 }

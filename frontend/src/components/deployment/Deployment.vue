@@ -27,7 +27,7 @@
           <td>{{ item.readyReplicas }}/{{ item.replicaCount }}</td>
           <td>{{ item.createdTime }}</td>
           <td>
-            <button type="button" class="btn btn-secondary btn-sm" @click="deploymentdetail(item.name)">조회</button>
+            <button type="button" class="btn btn-secondary btn-sm" @click="deploymentdetail(item.deploymentName)">조회</button>
           </td>
           <td>
             <button type="button" class="btn btn-outline-secondary btn-sm"
@@ -118,7 +118,6 @@ export default {
           var reload = setInterval( async () => {
             await getUpdate()
             //update값이 모두 false이면(업데이트 완료)
-              console.log("getDepl완료, update 상태 : ",update.value)
               if(!update.value){
               clearInterval(reload);
 
@@ -168,14 +167,6 @@ export default {
 
     setLoading();
     getdepl();
-    //페이지 reload
-    // var reload = setInterval(async() => {
-    //   await getdepl(currentPage.value);
-    //   //update값이 모두 false이면
-    //   if(!update.value){
-    //     clearInterval(reload);
-    //   }
-    // }, 2000);
 
     //디플로이먼트 데이터 페이지 이동
     const deploymentdetail = (name) => {
