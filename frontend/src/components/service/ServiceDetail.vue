@@ -5,58 +5,71 @@
                @click="moveList">
         <i class="bi bi-chevron-double-left"></i> List</button>
     </div>
-  <table-slot header="실시간 정보">
+  <table-slot header="메타데이터">
     <base-spinner v-if="isLoading"></base-spinner>
     <table v-else>
     <thead>
     <tr>
       <th>이름</th>
+      <th>네임스페이스</th>
+      <th>생성시간</th>
+      <th>uid</th>
+      <th>레이블</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>{{ items.serviceName }}</td>
+      <td>{{ items.namespace }}</td>
+      <td>{{ items.createdTime }}</td>
+      <td>{{ items.uid }}</td>
+      <td><label-list :labels="items.labels ? JSON.parse(items.labels) : {}"></label-list></td>
+    </tr>
+    </tbody>
+    </table>
+  </table-slot>
+  <table-slot header="리소스 정보">
+    <base-spinner v-if="isLoading"></base-spinner>
+    <table v-else>
+    <thead>
+    <tr>
       <th>타입</th>
       <th>클러스터 IP</th>
-      <th>포트</th>
-      <th>외부 IP</th>
-      <th>생성시간</th>
-      <th>레이블</th>
+      <th>세션어피니티</th>
+      <th>셀렉터</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-      <td>{{ item.name }}</td>
-      <td>{{ item.type }}</td>
-      <td>{{ item.clusterIP }}</td>
-      <td>{{ item.port }}</td>
-      <td>{{ item.externalIP }}</td>
-      <td>{{ item.createdTime }}</td>
-      <td><label-list :labels="item.label ? JSON.parse(item.label) : null"></label-list></td>
+      <td>{{ items.type }}</td>
+        <td>{{ items.clusterIp }}</td>
+      <td>{{ items.sessionAffinity }}</td>
+      <td><label-list :labels="items.labels ? JSON.parse(items.selector) : {}"></label-list></td>
     </tr>
     </tbody>
     </table>
   </table-slot>
-  <table-slot header="데이터 기록 내역">
-    <base-spinner v-if="isLoading"></base-spinner>
-    <table v-else>
-    <thead>
-    <tr>
-      <th>이름</th>
-        <th>네임스페이스</th>
-        <th>타입</th>
-        <th>클러스터 IP</th>
-      <th>생성시간</th>
-      <th>레이블</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-for="(item, index) in items" :key="index">
-      <td>{{ item.name }}</td>
-        <td>{{ item.namespace }}</td>
-        <td>{{ item.type }}</td>
-        <td>{{ item.clusterIp }}</td>
-      <td>{{ item.createdTime }}</td>
-      <td><label-list :labels="JSON.parse(item.labels)"></label-list></td>
-    </tr>
-    </tbody>
-    </table>
-  </table-slot>
+      <table-slot header="포트 정보">
+          <base-spinner v-if="isLoading"></base-spinner>
+          <table v-else>
+              <thead>
+              <tr>
+                  <th>Node Port</th>
+                  <th>Port</th>
+                  <th>Protocol</th>
+                  <th>Target Port</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(port,index) in items.ports" :key="index">
+                  <td>{{ port.nodePort }}</td>
+                  <td>{{ port.port }}</td>
+                  <td>{{ port.protocol }}</td>
+                  <td>{{ port.targetPort }}</td>
+              </tr>
+              </tbody>
+          </table>
+      </table-slot>
   </div>
 </template>
 <script>
@@ -69,7 +82,7 @@ import {useRoute} from "vue-router";
 export default {
     name: "serviceView",
     components: {
-        LabelList,
+        LabelList
     },
     setup() {
         const items = ref([]);
@@ -80,9 +93,14 @@ export default {
         const getService = async () => {
             isLoading.value = true
             try {
-                const {data} = await axios.get(`/service/${name}`);
+                const {data} = await axios.get(`service/list/${name}`);
                 console.log("service : ", data)
                 items.value = data.list[0];
+                for(let item in data.list[0].ports){
+                    if(item.nodePort == null || item.nodePort===""){
+                        item.nodePort === "-"
+                    }
+                }
             }catch(e){
                 console.log(e);
             }finally {
