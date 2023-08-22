@@ -7,10 +7,9 @@
           <th>이름</th>
           <th>타입</th>
           <th>클러스터 IP</th>
-          <th>포트</th>
-          <th>외부 IP</th>
-          <th>생성시간</th>
           <th>레이블</th>
+          <th>생성시간</th>
+          <th>상세</th>
       </tr>
       </thead>
         <tbody>
@@ -18,10 +17,11 @@
             <td>{{ item.serviceName }}</td>
             <td>{{ item.type }}</td>
             <td>{{ item.clusterIp }}</td>
-            <td>{{ item.port }}</td>
-            <td>{{ item.externalIP }}</td>
+            <td><label-list :labels="JSON.parse(item.labels)"></label-list></td>
             <td>{{ item.createdTime }}</td>
-            <td><label-list :labels="item.label ? JSON.parse(item.label) : null"></label-list></td>
+            <td>
+                <button type="button" class="btn btn-secondary btn-sm" @click="serviceDetail(item.serviceName)">조회</button>
+            </td>
         </tr>
       </tbody>
     </table>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import {ref, onMounted, computed} from "vue";
+import {ref, onMounted, computed, provide} from "vue";
 import LabelList from "@/components/common/LabelList.vue";
 import axios from "axios";
 import Pagination from "@/components/common/Pagination.vue";
@@ -78,6 +78,8 @@ export default {
             getServiceList();
             setLoading();
         })
+        //setLoading 함수를 하위 컴포넌트에 주입 -> 하위 컴포넌트에서 'inject'함수를 사용해 가져와서 사용가능.
+        provide('setLoading', setLoading);
 
         /**
          * service 상세조회
@@ -93,6 +95,7 @@ export default {
             getServiceList,
             numberOfPages,
             currentPage,
+            setLoading
         };
     },
 };

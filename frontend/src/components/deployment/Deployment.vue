@@ -57,7 +57,7 @@
 
 <script>
 import axios from "axios";
-import { computed, provide, ref } from "vue";
+import {computed, onMounted, provide, ref} from "vue";
 import { useRouter } from 'vue-router';
 import LabelList from "@/components/common/LabelList.vue";
 import Pagination from "@/components/common/Pagination.vue";
@@ -164,9 +164,11 @@ export default {
         isLoading.value = false;
       }
     };
+      onMounted(() =>{
+          setLoading();
+          getdepl();
+      })
 
-    setLoading();
-    getdepl();
 
     //디플로이먼트 데이터 페이지 이동
     const deploymentdetail = (name) => {

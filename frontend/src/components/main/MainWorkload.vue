@@ -64,7 +64,7 @@ export default {
         const deplReadyRep = ref(0)
 
         const podState = reactive({ items: [] })
-        //const deplState = reactive({ things: { items: [] } })
+        const deplState = reactive( { items: [] })
 
         const getPodPreview = async () => {
             const { data } = await axios.get(`pod/listall`);
@@ -90,47 +90,19 @@ export default {
                         break
                 }
             }
-
-            // for (let i = 0; i < podLength.value; i++) {
-            //     const status = podState.items[i].status
-            //
-            //     switch (status) {
-            //         case "Running":
-            //             podRunCount.value++
-            //             break
-            //         case "Pending":
-            //             podPendCount.value++
-            //             break
-            //         case "Succeeded":
-            //             podSucCount.value++
-            //             break
-            //         case "Failed":
-            //             podFailCount.value++
-            //             break
-            //         case "Unknown":
-            //             podUnknCount.value++
-            //             break
-            //     }
-            // }
             drawPodChart()
         }
 
-        // function getDeplPreview() {
-        //     axios.get(this.$store.getters.uri + 'deployment/list').then(({ data }) => {
-        //         deplState.things = data
-        //
-        //         for (const item of deplState.things.items) {
-        //             if (item.status.replicas !== 0) {
-        //                 deplReplicas.value += item.status.replicas
-        //             }
-        //
-        //             if (item.status.readyReplicas) {
-        //                 deplReadyRep.value += item.status.readyReplicas
-        //             }
-        //         }
-        //         drawDeplChart()
-        //     })
-        // }
+        const getDeplPreview = async () => {
+            const { data } = await axios.get(`deployment/listall`);
+                deplState.items = data.list
+
+                for (const item of deplState.items) {
+                        deplReplicas.value += item.replicaCount
+                        deplReadyRep.value += item.readyReplicas
+                }
+                drawDeplChart()
+        }
 
         function drawPodChart() {
             const ctx = document.getElementById("podChart")
@@ -156,33 +128,33 @@ export default {
             })
         }
 
-        // function drawDeplChart() {
-        //     const ctx = document.getElementById("deplChart")
-        //
-        //     new Chart(ctx, {
-        //         type: "pie",
-        //         data: {
-        //             labels: ["Ready", "Not Ready"],
-        //             datasets: [
-        //                 {
-        //                     label: "deployment",
-        //                     data: [deplReadyRep.value, deplReplicas.value - deplReadyRep.value],
-        //                     backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)"],
-        //                     hoverOffset: 4,
-        //                 }
-        //             ]
-        //         },
-        //         options: {
-        //             plugins: {
-        //                 legend: { position: "left" }
-        //             }
-        //         }
-        //     })
-        // }
+        function drawDeplChart() {
+            const ctx = document.getElementById("deplChart")
+
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: ["Ready", "Not Ready"],
+                    datasets: [
+                        {
+                            label: "deployment",
+                            data: [deplReadyRep.value, deplReplicas.value - deplReadyRep.value],
+                            backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)"],
+                            hoverOffset: 4,
+                        }
+                    ]
+                },
+                options: {
+                    plugins: {
+                        legend: { position: "left" }
+                    }
+                }
+            })
+        }
 
         onMounted(() => {
             getPodPreview()
-            //getDeplPreview()
+            getDeplPreview()
         })
 
         return {

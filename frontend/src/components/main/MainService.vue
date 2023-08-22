@@ -8,32 +8,25 @@
     <table>
     <thead>
     <tr>
-      <th>이름</th>
-      <th>타입</th>
-      <th>클러스터 IP</th>
-      <th>포트</th>
-      <th>외부 IP</th>
-      <th>생성시간</th>
-      <th>레이블</th>
-      <th>데이터 기록</th>
+        <th>이름</th>
+        <th>타입</th>
+        <th>클러스터 IP</th>
+        <th>레이블</th>
+        <th>생성시간</th>
     </tr>
     </thead>
     <tbody>
     <tr v-for="item in serviceList" :key="item">
-      <td>{{ item.name }}</td>
-      <td>{{ item.type }}</td>
-      <td>{{ item.clusterIP }}</td>
-      <td>{{ item.port }}</td>
-      <td>{{ item.externalIP }}</td>
-      <td>{{ item.createdTime }}</td>
-      <td>
-        <label-list :labels="item.label ? JSON.parse(item.label) : null"></label-list>
-      </td>
+        <td>{{ item.serviceName }}</td>
+        <td>{{ item.type }}</td>
+        <td>{{ item.clusterIp }}</td>
+        <td><label-list :labels="JSON.parse(item.labels)"></label-list></td>
+        <td>{{ item.createdTime }}</td>
       <td>
         <button type="button" class="btn btn-secondary btn-sm">
           <router-link class="more" style="color: white; text-decoration: none;" :to="{
               name: 'serviceView',
-              params: { name: item.name },
+              params: { name: item.serviceName },
             }">조회
           </router-link>
         </button>
@@ -61,18 +54,16 @@ export default {
   methods: {
     getServicePreview() {
       var vm = this;
-      this.$axios
-          .get("/api/service/mainPageList")
+      this.$axios.get("service/listall")
           .then(function (response) {
-            console.log((response.data));
-            vm.serviceList = response.data;
-
+              //3개의 행만 불러온다.
+            vm.serviceList = response.data.list.slice(0,3);
           })
     }
   },
 
   mounted() {
-    //this.getServicePreview();
+    this.getServicePreview();
 
   },
 };
