@@ -32,4 +32,8 @@ class ServiceQuerydslRepository (
         return query.fetch()
     }
 
+    fun deleteAll() {
+        queryFactory.delete(serviceData).execute()
+    }
+
 }

@@ -7,20 +7,24 @@ import com.miniproject.kubeBoard.repository.pod.PodRepository
 import io.fabric8.kubernetes.api.model.Pod
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import javax.persistence.EntityManager
 
 @Service
 class PodService (
         private val podRepository: PodRepository,
         private val podClient: PodClient,
         private val podQuerydslRepository: PodQuerydslRepository,
+        private val entityManager: EntityManager,
 ){
     @Transactional
     fun syncPodList(){
-        //기존 podList 전체 삭제
-        podRepository.deleteAll()
-        //동기화해온 리스트 저장
+        //기존 podList 일괄 삭제
+        podQuerydslRepository.deleteAll()
+        //동기화해온 리스트 일괄 저장
         val podList= podClient.getPodList()
-        podRepository.saveAll(podList)
+        for(pod in podList){
+            entityManager.persist(pod)
+        }
     }
 
     fun getPod(name: String): PodListResponse {

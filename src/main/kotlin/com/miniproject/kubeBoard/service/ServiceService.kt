@@ -6,20 +6,24 @@ import com.miniproject.kubeBoard.repository.service.ServiceQuerydslRepository
 import com.miniproject.kubeBoard.repository.service.ServiceRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import javax.persistence.EntityManager
 
 @Service
 class ServiceService (
         private val serviceRepository: ServiceRepository,
         private val serviceClient: ServiceClient,
         private val serviceQuerydslRepository: ServiceQuerydslRepository,
+        private val entityManager: EntityManager,
 ){
     @Transactional
     fun syncServiceList(){
-        //기존 Service 전체 삭제
-        serviceRepository.deleteAll()
-        //동기화해온 리스트 저장
+        //기존 podList 일괄 삭제
+        serviceQuerydslRepository.deleteAll()
+        //동기화해온 리스트 일괄 저장
         val serviceList= serviceClient.getServiceList()
-        serviceRepository.saveAll(serviceList)
+        for(service in serviceList){
+            entityManager.persist(service)
+        }
     }
     fun getService(name: String): ServiceListResponse {
         val service = serviceQuerydslRepository.getService(name)

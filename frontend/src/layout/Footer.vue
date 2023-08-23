@@ -1,6 +1,6 @@
 <template>
   <footer class="footer text-center" >
-      <img :src="require('@/assets/images/kubeBoardLogo.png')" alt="Bootstrap"  height="40">
+      <img :src="require('@/assets/images/kubeLogo.png')" alt="Bootstrap"  height="40">
       <span style="font-size: 25px; font-weight: bold;" class="ms-2">KubeBoard</span>
   </footer>
 </template>

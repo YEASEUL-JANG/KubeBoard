@@ -7,20 +7,24 @@ import com.miniproject.kubeBoard.repository.deployment.DeploymentRepository
 import io.fabric8.kubernetes.api.model.apps.Deployment
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import javax.persistence.EntityManager
 
 @Service
 class DeploymentService (
         private val deploymentRepository: DeploymentRepository,
         private val deploymentClient: DeploymentClient,
         private val deploymentQuerydslRepository: DeploymentQuerydslRepository,
+        private val entityManager: EntityManager,
 ){
     @Transactional
     fun syncDeploymentList(){
-        //기존 DeploymentList 전체 삭제
-        deploymentRepository.deleteAll()
-        //동기화해온 리스트 저장
+        //기존 List 일괄 삭제
+        deploymentQuerydslRepository.deleteAll()
+        //동기화해온 리스트 일괄 저장
         val deploymentList= deploymentClient.getDeploymentList()
-        deploymentRepository.saveAll(deploymentList)
+        for(deployment in deploymentList){
+            entityManager.persist(deployment)
+        }
     }
 
     fun getDeployment(name: String): DeploymentListResponse {

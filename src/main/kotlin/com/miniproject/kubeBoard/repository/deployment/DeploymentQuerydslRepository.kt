@@ -28,4 +28,8 @@ class DeploymentQuerydslRepository (
         sublist?.let {query.limit(it.toLong()) }
         return query.fetch()
     }
+
+    fun deleteAll() {
+        queryFactory.delete(deploymentData).execute()
+    }
 }

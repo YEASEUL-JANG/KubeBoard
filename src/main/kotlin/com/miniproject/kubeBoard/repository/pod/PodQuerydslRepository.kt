@@ -29,4 +29,8 @@ class PodQuerydslRepository (
                 sublist?.let {query.limit(it.toLong()) }
         return query.fetch()
     }
+
+    fun deleteAll() {
+        queryFactory.delete(podData).execute()
+    }
 }
