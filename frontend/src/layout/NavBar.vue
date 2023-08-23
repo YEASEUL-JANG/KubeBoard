@@ -10,9 +10,10 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <form class="mainSearch" v-on:submit="search">
+        <form class="mainSearch" @submit.prevent="search">
     <div class="input-group">
-      <span class="input-group-text" id="basic-addon1"><button><img :src="require('@/assets/images/search.png')" style="height:20px"/></button></span>
+      <span class="input-group-text" id="basic-addon1">
+          <button><img :src="require('@/assets/images/search.png')" style="height:20px"/></button></span>
       <input type="text" class="form-control" placeholder="검색어를 입력하세요." aria-label="Username" aria-describedby="basic-addon1" v-model="searchInput">
     </div>
       </form>
@@ -53,6 +54,7 @@ export default {
             if(searchInput.value !== '') {
                 router.push({
                     path: "/search/"+searchInput.value,
+                    query:{q: searchInput.value}
                 });
                 console.log(searchInput.value);
             } else {
