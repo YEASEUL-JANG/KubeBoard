@@ -60,4 +60,18 @@ class PodController (
         return podService.getPod(name)
 
     }
+
+    /**
+     * Pod 검색 데이터
+     */
+    @GetMapping("/list/search/{name}")
+    fun getSearchPod(
+            @PathVariable("name") name:String,
+            @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
+    ): PodListResponse {
+        val offset= (page-1)*5
+        val sublist=5*page
+        return podService.getSearchPod(name,offset,sublist)
+
+    }
 }

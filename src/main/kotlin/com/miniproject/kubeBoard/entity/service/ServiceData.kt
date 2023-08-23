@@ -21,7 +21,7 @@ class ServiceData (
         @JsonManagedReference
         val ports: MutableList<PortData> = mutableListOf(),
 
-        @Id트
+        @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val serviceIdx: Long? = null,
 ){

@@ -26,14 +26,6 @@ export default {
         NavBar,
         SideBar
     },
-
-    //로그인 토큰 여부 확인
-    //네브바 출력 여부 결정 시 사용
-    computed: {
-        isLogined() {
-            return this.$store.getters.isLogin;
-        }
-    },
 }
 </script>
 

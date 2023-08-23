@@ -3,144 +3,120 @@
     <template v-slot:header>
       <router-link class="card-title" to="/pod">파드</router-link>
     </template>
-    <base-spinner v-if="isLoading && !error"></base-spinner>
-    <table v-else-if="!isLoading && !error && podList.length !== 0">
+    <base-spinner v-if="isLoading"></base-spinner>
+    <table v-else-if="!isLoading && !error && items.length !== 0">
       <thead>
       <tr>
-        <th>이름</th>
-        <th>준비</th>
-        <th>상태</th>
-        <th>재시작</th>
-        <th>생성시간</th>
-        <th>IP</th>
-        <th>노드 명</th>
-        <th>레이블</th>
-        <th>데이터 기록</th>
+          <th>파드 명</th>
+          <th>네임스페이스</th>
+          <th>상태</th>
+          <th>생성시간</th>
+          <th>PodIP</th>
+          <th>노드 명</th>
+          <th>레이블</th>
+          <th>데이터 기록</th>
       </tr>
       </thead>
-      <tbody>
-      <tr v-for="(pod, index) in podList" :key="index">
-        <td>{{ pod.name }}</td>
-        <td>{{ pod.ready }}</td>
-        <td>{{ pod.status }}</td>
-        <td>{{ pod.restarts }}</td>
-        <td>{{ pod.createdTime }}</td>
-        <td>{{ pod.ip }}</td>
-        <td>{{ pod.nodeName }}</td>
-        <td>
-          <label-list :labels="JSON.parse(pod.labels)"></label-list>
-        </td>
-        <td>
-          <a class="btn btn-secondary btn-sm" href="#"
-             @click="this.$router.push({
-                name: 'PodDetail',
-                params: { name: pod.name }
-           })"
-          >조회</a>
+        <tbody>
+        <tr v-if="items.length === 0">
+            <td colspan="8"><h5>표시할 데이터가 없습니다.</h5></td>
+        </tr>
+        <tr v-for="(pod, index) in items" :key="index">
+            <td>{{ pod.podName }}</td>
+            <td>{{pod.namespace}}</td>
+            <td>{{ pod.phase }}</td>
+            <td>{{ pod.createdTime }}</td>
+            <td>{{ pod.podIp }}</td>
+            <td>{{ pod.nodeName }}</td>
+            <td>
+                <label-list :labels="JSON.parse(pod.labels)"></label-list>
+            </td>
+            <td>
+                <a class="btn btn-secondary btn-sm" href="#"
+                   @click="poddetail(pod.podName)"
+                >조회</a>
         </td>
       </tr>
       </tbody>
     </table>
-    <div v-else-if="!isLoading && error">
-      <h5>잠시 후 다시 시도해주세요.</h5>
-      <h5>{{ '(' + error + ')' }}</h5>
-    </div>
-    <div v-else>
-      <h3> 결과값이 존재하지 않습니다.</h3>
-      <router-link class="more" to="/deployment">...more</router-link>
-    </div>
-    <template v-slot:pageSlot v-if="!isLoading && !error">
-      <Pagination :pagination="this.pagination"></Pagination>
-    </template>
+      <template v-slot:pageSlot>
+          <Pagination :currentPage="currentPage"
+                      :numberOfPages="numberOfPages"
+                      @getList="loadPods"/>
+      </template>
   </table-slot>
 </template>
 
 <script>
 import Pagination from '@/components/common/Pagination.vue';
 import LabelList from '../common/LabelList.vue';
-import { provide, ref, watch } from "vue";
+import {computed, onMounted, provide, ref} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+import axios from "axios";
 
 export default {
-  components: {
-    Pagination,
-    LabelList,
-  },
-  setup() {
-    const podList = ref([]);
-    const pagination = ref([]);
-    const isLoading = ref(false);
-    const error = ref(null);
-    const route = useRoute();
-    const router = useRouter();
-    const store = useStore();
+    components: {
+        Pagination,
+        LabelList,
+    },
+    setup() {
+        const items = ref([]);
+        const currentPage = ref(1);
+        const numberOflist = ref(0);
+        const isLoading = ref(false);
+        const error = ref(null);
+        const route = useRoute();
+        const router = useRouter();
+        const store = useStore();
+        const limit = 5;
 
-    const loadPods = () => {
-      isLoading.value = true;
-      const requestedPageNum = route.query.page;
-      const page = requestedPageNum === undefined && isNaN(requestedPageNum) ? 1 : requestedPageNum;
-      const url = store.getters.uri + 'pod/search/' +route.params.searchInput + '?page=' + page;
-      console.log(url);
+        //총 페이지 수 계산
+        const numberOfPages = computed(() => {
+            return Math.ceil((numberOflist.value / limit));
+        });
 
-      fetch(url, {
-        headers: { "X-AUTH-TOKEN": store.getters.getToken }
-      }).then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          throw new Error(res.status);
+        const setLoading = () => {
+            isLoading.value = true;
         }
-      }).then((data) => {
-        podList.value = data.podList;
-        pagination.value = data.pagination;
-      }).catch((err) => {
-        error.value = err.message;
-      }).finally(() => {
-        isLoading.value = false;
-      })
-    };
+        provide('setLoading', setLoading);
 
-    const movePage = (pageNum) => {
-      if (pageNum > 0 && pageNum <= pagination.value.totalPageCnt) {
-        if (paramExists()) {
-          router.push({
-            name: route.name,
-            query: { page: pageNum },
-            params: route.params,
-          });
-        } else {
-          router.push({
-            name: route.name,
-            query: { page: pageNum },
-          });
-        }
-      }
-    };
+        const loadPods = async (page = currentPage.value) => {
+            isLoading.value = true;
+            currentPage.value = page;
+            try {
+                const {data} = await axios.get(
+                    `/pod/list/search/` + route.params.searchInput + `?page=` + page);
+                items.value = data.list;
+                numberOflist.value = data.count;
+            } catch (err) {
+                console.log(err);
+            } finally {
+                isLoading.value = false;
+            }
+        };
 
-    const paramExists = () => {
-      if (route.params !== undefined && route.params !== null) {
-        return false;
-      } else {
-        return true;
-      }
-    };
+        const paramExists = () => {
+            return !(route.params !== undefined && route.params !== null);
+        };
+        /**
+         * Pod 상세조회
+         */
+        const poddetail = (name) => {
+            router.push('/pod/' + name);
+        };
 
-    loadPods();
-
-    provide('movePage', movePage)
-
-    watch(route, () => {
-      loadPods();
-    })
-
-    return { podList, pagination, isLoading, error, route, router, store, loadPods, movePage, paramExists };
-  }
+        onMounted(() =>{
+            loadPods();
+            setLoading();
+        })
+        return {items,poddetail, numberOfPages, currentPage, isLoading, error, router, store, loadPods, paramExists};
+    }
 }
 </script>
 
 <style scoped>
 .card-title {
-  font-size: 24px;
+    font-size: 24px;
 }
 </style>
