@@ -39,6 +39,7 @@ import LabelList from "@/components/common/LabelList.vue";
 import axios from "axios";
 import Pagination from "@/components/common/Pagination.vue";
 import router from "@/router";
+import {useRoute} from "vue-router";
 
 
 export default {
@@ -53,13 +54,15 @@ export default {
         const currentPage = ref(1);
         const isLoading = ref(false);
         const limit = 5;
+        const route = useRoute();
         const setLoading = () => {
             isLoading.value = true;
         }
         const getServiceList = async (page = currentPage.value) => {
             currentPage.value = page;
             try {
-                const {data} = await axios.get(`/service/list?page=${currentPage.value}`);
+                const searchQuery = route.params.searchInput?`&search=${route.params.searchInput}`:""
+                const {data} = await axios.get(`/service/list?page=${currentPage.value}${searchQuery}`);
                 console.log("serviceList : ", data)
                 items.value = data.list;
                 numberOflist.value = data.count;

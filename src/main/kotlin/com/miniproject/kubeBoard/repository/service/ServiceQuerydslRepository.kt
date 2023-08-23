@@ -12,14 +12,6 @@ import org.springframework.stereotype.Component
 class ServiceQuerydslRepository (
         private val queryFactory: JPAQueryFactory
 ){
-    fun getServiceList(offset: Int, sublist: Int):List<ServiceData> {
-        return queryFactory.select(serviceData)
-                .from(serviceData)
-                .offset(offset.toLong())
-                .limit(sublist.toLong())
-                .fetch()
-    }
-
     fun getService(name: String): ServiceData? {
         return queryFactory.select(serviceData)
                 .from(serviceData)
@@ -27,10 +19,10 @@ class ServiceQuerydslRepository (
                 .fetchOne()
     }
 
-    fun getSearchServiceList(name: String, offset: Int?, sublist: Int?): List<ServiceData> {
-        val searchCondition = serviceData.serviceName.containsIgnoreCase(name)
-                .or(serviceData.namespace.containsIgnoreCase(name))
-                .or(serviceData.labels.containsIgnoreCase(name))
+    fun getSearchServiceList(search: String?, offset: Int?, sublist: Int?): List<ServiceData> {
+        val searchCondition = serviceData.serviceName.containsIgnoreCase(search)
+                .or(serviceData.namespace.containsIgnoreCase(search))
+                .or(serviceData.labels.containsIgnoreCase(search))
 
         val query =  queryFactory.select(serviceData)
                 .from(serviceData)

@@ -1,21 +1,15 @@
 <template>
   <div>
-<!--  <SearchDepl />-->
-  <SearchPod />
-<!--  <SearchService />-->
+      <Service/>
   </div>
 </template>
 
 <script>
-//import SearchService from '@/components/service/SearchService.vue';
-import SearchPod from '@/components/pod/SearchPod.vue';
-//import SearchDepl from '@/components/deployment/SearchDepl.vue';
+import Service from '@/components/service/Service.vue';
 
 export default {
     components:{
-        //SearchService,
-        SearchPod,
-        //SearchDepl,
+        Service,
     },
     name:"SearchPage",
 

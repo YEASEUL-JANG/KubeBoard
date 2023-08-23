@@ -37,7 +37,7 @@ class ServiceController (
     }
 
     /**
-     * deployment 전체 데이터
+     * service 전체 데이터
      */
     @GetMapping("/listall")
     fun getServiceListAll(): ServiceListResponse {
@@ -49,11 +49,12 @@ class ServiceController (
      */
     @GetMapping("/list")
     fun getServiceList(
+            @RequestParam(value = "search", required = false, defaultValue = "") search: String?,
             @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
     ): ServiceListResponse {
         val offset= (page-1)*5
         val sublist=5*page
-        return serviceService.getServiceList(offset,sublist)
+        return serviceService.getSearchServiceList(search,offset,sublist)
     }
 
     /**
@@ -66,17 +67,4 @@ class ServiceController (
         return serviceService.getService(name)
     }
 
-    /**
-     * service 검색 데이터
-     */
-    @GetMapping("/list/search/{name}")
-    fun getSearchService(
-            @PathVariable("name") name:String,
-            @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
-    ): ServiceListResponse {
-        val offset= (page-1)*5
-        val sublist=5*page
-        return serviceService.getSearchServiceList(name,offset,sublist)
-
-    }
 }

@@ -21,13 +21,6 @@ class ServiceService (
         val serviceList= serviceClient.getServiceList()
         serviceRepository.saveAll(serviceList)
     }
-
-    fun getServiceList(offset: Int, sublist: Int): ServiceListResponse {
-        val count = serviceRepository.findAll().size
-        val serviceList = serviceQuerydslRepository.getServiceList(offset, sublist)
-        return ServiceListResponse(count,serviceList)
-    }
-
     fun getService(name: String): ServiceListResponse {
         val service = serviceQuerydslRepository.getService(name)
         return ServiceListResponse(1, listOf(service))
@@ -42,9 +35,9 @@ class ServiceService (
         return serviceClient.getServiceClientList()
     }
 
-    fun getSearchServiceList(name: String, offset: Int, sublist: Int): ServiceListResponse {
-        val serviceList = serviceQuerydslRepository.getSearchServiceList(name,offset, sublist)
-        val count = serviceQuerydslRepository.getSearchServiceList(name,null,null).size
+    fun getSearchServiceList(search: String?, offset: Int, sublist: Int): ServiceListResponse {
+        val serviceList = serviceQuerydslRepository.getSearchServiceList(search,offset, sublist)
+        val count = serviceQuerydslRepository.getSearchServiceList(search,null,null).size
         return ServiceListResponse(count,serviceList)
     }
 
