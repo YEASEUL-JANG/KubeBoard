@@ -1,6 +1,7 @@
 package com.miniproject.kubeBoard.entity.deployment
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.miniproject.kubeBoard.service.CommonService
 import io.fabric8.kubernetes.api.model.Condition
 import io.fabric8.kubernetes.api.model.apps.DeploymentCondition
 import javax.persistence.*
@@ -26,7 +27,7 @@ class ConditionData(
     companion object{
         fun of(condition: DeploymentCondition, deploymentData: DeploymentData): ConditionData {
             return ConditionData(
-                    lastTransitionTime = condition.lastTransitionTime,
+                    lastTransitionTime = CommonService.translateForm(condition.lastTransitionTime),
                     message = condition.message,
                     reason = condition.reason,
                     status = condition.status,

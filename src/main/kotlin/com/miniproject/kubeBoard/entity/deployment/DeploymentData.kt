@@ -37,7 +37,7 @@ class DeploymentData(
             val deploymentData = DeploymentData(
                     deploymentName = deployment.metadata.name,
                     namespace = deployment.metadata.namespace,
-                    createdTime = deployment.metadata.creationTimestamp,
+                    createdTime = CommonService.translateForm(deployment.metadata.creationTimestamp),
                     replicaCount = deployment.status.replicas,
                     readyReplicas = deployment.status.readyReplicas,
                     labels = CommonService.getLabel(deployment.metadata.labels),

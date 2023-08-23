@@ -7,8 +7,8 @@
           <th>이름</th>
           <th>타입</th>
           <th>클러스터 IP</th>
-          <th>레이블</th>
           <th>생성시간</th>
+          <th>레이블</th>
           <th>상세</th>
       </tr>
       </thead>
@@ -20,8 +20,8 @@
             <td>{{ item.serviceName }}</td>
             <td>{{ item.type }}</td>
             <td>{{ item.clusterIp }}</td>
-            <td><label-list :labels="JSON.parse(item.labels)"></label-list></td>
             <td>{{ item.createdTime }}</td>
+            <td><label-list :labels="JSON.parse(item.labels)"></label-list></td>
             <td>
                 <button type="button" class="btn btn-secondary btn-sm" @click="serviceDetail(item.serviceName)">조회</button>
             </td>

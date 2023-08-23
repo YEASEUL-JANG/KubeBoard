@@ -30,7 +30,7 @@ class ServiceData (
                 val serviceData = ServiceData(
                         serviceName = service.metadata.name,
                         labels = CommonService.getLabel(service.metadata.labels),
-                        createdTime = service.metadata.creationTimestamp,
+                        createdTime = CommonService.translateForm(service.metadata.creationTimestamp),
                         clusterIp = service.spec.clusterIP,
                         type = service.spec.type,
                         namespace = service.metadata.namespace,

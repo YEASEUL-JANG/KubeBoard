@@ -43,7 +43,7 @@ class PodData(
                     namespace = pod.metadata.namespace,
                     phase = pod.status.phase,
                     podIp = pod.status.podIP,
-                    createdTime = pod.metadata.creationTimestamp,
+                    createdTime = CommonService.translateForm(pod.metadata.creationTimestamp),
                     nodeName = pod.spec.nodeName,
                     labels = CommonService.getLabel(pod.metadata.labels),
                     serviceAccountName = pod.spec.serviceAccountName,
