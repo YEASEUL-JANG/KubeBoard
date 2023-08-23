@@ -23,12 +23,6 @@ class PodService (
         podRepository.saveAll(podList)
     }
 
-    fun getPodList(offset: Int, sublist: Int): PodListResponse {
-        val count = podRepository.findAll().size
-        val podList = podQuerydslRepository.getPodList(offset, sublist)
-        return PodListResponse(count,podList)
-    }
-
     fun getPod(name: String): PodListResponse {
         val pod = podQuerydslRepository.getPod(name)
         return PodListResponse(1, listOf(pod))
@@ -43,9 +37,9 @@ class PodService (
         return podClient.getPodClientList()
     }
 
-    fun getSearchPod(name: String, offset: Int, sublist: Int): PodListResponse {
-        val podList = podQuerydslRepository.getSearchPodList(name,offset,sublist)
-        val count = podQuerydslRepository.getSearchPodList(name,null,null).size
+    fun getSearchPod(search: String?, offset: Int, sublist: Int): PodListResponse {
+        val podList = podQuerydslRepository.getSearchPodList(search,offset,sublist)
+        val count = podQuerydslRepository.getSearchPodList(search,null,null).size
         return PodListResponse(count,podList)
     }
 

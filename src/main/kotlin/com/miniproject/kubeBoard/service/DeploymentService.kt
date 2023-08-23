@@ -23,12 +23,6 @@ class DeploymentService (
         deploymentRepository.saveAll(deploymentList)
     }
 
-    fun getDeploymentList(offset: Int, sublist: Int): DeploymentListResponse {
-        val count = deploymentRepository.findAll().size
-        val deploymentList = deploymentQuerydslRepository.getDeploymentList(offset, sublist)
-        return DeploymentListResponse(count,deploymentList)
-    }
-
     fun getDeployment(name: String): DeploymentListResponse {
         val deployment = deploymentQuerydslRepository.getDeployment(name)
         return DeploymentListResponse(1, listOf(deployment))

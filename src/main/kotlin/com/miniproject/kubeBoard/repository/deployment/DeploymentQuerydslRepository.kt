@@ -11,14 +11,6 @@ import org.springframework.stereotype.Component
 class DeploymentQuerydslRepository (
         private val queryFactory: JPAQueryFactory
 ){
-    fun getDeploymentList(offset: Int, sublist: Int):List<DeploymentData> {
-        return queryFactory.select(deploymentData)
-                .from(deploymentData)
-                .offset(offset.toLong())
-                .limit(sublist.toLong())
-                .fetch()
-    }
-
     fun getDeployment(name: String): DeploymentData? {
         return queryFactory.select(deploymentData)
                 .from(deploymentData)
