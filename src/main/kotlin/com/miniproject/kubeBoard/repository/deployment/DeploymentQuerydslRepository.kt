@@ -26,10 +26,10 @@ class DeploymentQuerydslRepository (
                 .fetchOne()
     }
 
-    fun getSearchDeploymentList(name: String, offset: Int?, sublist: Int?): List<DeploymentData> {
-        val searchCondition = deploymentData.deploymentName.containsIgnoreCase(name)
-                .or(deploymentData.namespace.containsIgnoreCase(name))
-                .or(deploymentData.labels.containsIgnoreCase(name))
+    fun getSearchDeploymentList(search: String?, offset: Int?, sublist: Int?): List<DeploymentData> {
+        val searchCondition = deploymentData.deploymentName.containsIgnoreCase(search)
+                .or(deploymentData.namespace.containsIgnoreCase(search))
+                .or(deploymentData.labels.containsIgnoreCase(search))
 
         val query =  queryFactory.select(deploymentData)
                 .from(deploymentData)

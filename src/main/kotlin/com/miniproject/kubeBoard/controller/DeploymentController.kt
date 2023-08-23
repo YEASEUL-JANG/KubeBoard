@@ -46,11 +46,12 @@ class DeploymentController (
      */
     @GetMapping("/list")
     fun getDeploymentList(
+            @RequestParam(value="search", required = false, defaultValue = "") search:String?,
             @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
     ): DeploymentListResponse {
         val offset= (page-1)*5
         val sublist=5*page
-        return deploymentService.getDeploymentList(offset,sublist)
+        return deploymentService.getSearchDeployment(search,offset,sublist)
     }
 
     /**
@@ -73,19 +74,5 @@ class DeploymentController (
             deploymentService.changeReplica(name,namespace,scale)
             1;
         }else 0;
-    }
-
-    /**
-     * deployment 검색 데이터
-     */
-    @GetMapping("/list/search/{name}")
-    fun getSearchDeployment(
-            @PathVariable("name") name:String,
-            @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
-    ): DeploymentListResponse {
-        val offset= (page-1)*5
-        val sublist=5*page
-        return deploymentService.getSearchDeployment(name,offset,sublist)
-
     }
 }
