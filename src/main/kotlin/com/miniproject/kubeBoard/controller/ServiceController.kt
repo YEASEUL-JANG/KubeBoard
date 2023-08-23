@@ -65,4 +65,18 @@ class ServiceController (
     ): ServiceListResponse {
         return serviceService.getService(name)
     }
+
+    /**
+     * service 검색 데이터
+     */
+    @GetMapping("/list/search/{name}")
+    fun getSearchService(
+            @PathVariable("name") name:String,
+            @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
+    ): ServiceListResponse {
+        val offset= (page-1)*5
+        val sublist=5*page
+        return serviceService.getSearchServiceList(name,offset,sublist)
+
+    }
 }

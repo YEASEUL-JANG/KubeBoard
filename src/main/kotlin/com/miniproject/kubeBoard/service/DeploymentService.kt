@@ -47,5 +47,11 @@ class DeploymentService (
         deploymentClient.changeReplica(name, namespace, scale);
     }
 
+    fun getSearchDeployment(name: String, offset: Int, sublist: Int): DeploymentListResponse {
+        val deploymentList = deploymentQuerydslRepository.getSearchDeploymentList(name,offset,sublist);
+        val count = deploymentQuerydslRepository.getSearchDeploymentList(name,null,null).size;
+        return DeploymentListResponse(count,deploymentList)
+    }
+
 
 }

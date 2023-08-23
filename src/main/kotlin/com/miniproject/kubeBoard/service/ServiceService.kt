@@ -42,5 +42,11 @@ class ServiceService (
         return serviceClient.getServiceClientList()
     }
 
+    fun getSearchServiceList(name: String, offset: Int, sublist: Int): ServiceListResponse {
+        val serviceList = serviceQuerydslRepository.getSearchServiceList(name,offset, sublist)
+        val count = serviceQuerydslRepository.getSearchServiceList(name,null,null).size
+        return ServiceListResponse(count,serviceList)
+    }
+
 
 }
