@@ -2,7 +2,8 @@
   <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" >
   <div class="container-fluid">
     <a class="navbar-brand" href="/">
-      <img :src="require('@/assets/images/STRATO.png')" alt="Bootstrap"  height="40">
+      <img :src="require('@/assets/images/kubeBoardLogo.png')" alt="Bootstrap"  height="40">
+       <span style="font-size: 25px; font-weight: bold;" class="ms-2">KubeBoard</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>

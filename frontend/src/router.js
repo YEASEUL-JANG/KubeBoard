@@ -1,15 +1,11 @@
 import { createWebHistory, createRouter } from "vue-router";
 import ServiceList from "./components/service/Service.vue";
 import ServiceView from "./components/service/ServiceDetail.vue";
-import Introduction from "./components/main/Introduction.vue";
 import Deployment from "./components/deployment/Deployment.vue";
 import DeploymentDetail from "./components/deployment/DeploymentDetail.vue";
 import Pod from "./components/pod/Pod.vue";
 import PodDetail from "./components/pod/PodDetail.vue";
 import MainPage from "@/page/MainPage.vue";
-import LoginView from "@/page/LoginView.vue";
-import JoinView from "@/page/JoinView.vue";
-//import store from "@/store/store";
 import NotFound from "@/components/common/NotFound.vue";
 import SearchPage from "@/page/SearchPage.vue";
 
@@ -17,14 +13,10 @@ const routes = [
     { path: "/", name: 'mainPage', component: MainPage, meta: {auth: true} },
     { path: '/service', name: 'serviceList', component: ServiceList, meta: {auth: true} },
     { path: '/service/:name', name: 'serviceView', component: ServiceView, meta: {auth: true} },
-    { path: '/introduction', name: 'introduction', component: Introduction, meta: {auth: true} },
     { path: '/deployment', name: 'Deployment', component: Deployment, meta: {auth: true} },
     { path: '/deployment/:name', name: 'deploymentDetail', component: DeploymentDetail, props: true, meta: {auth: true} },
     { path: '/pod', name: 'Pod', props: true, component: Pod, meta: {auth: true} },
     { path: '/pod/:name', name: 'PodDetail', props: true, component: PodDetail, meta: {auth: true} },
-    { path: '/login', name: 'Login', component: LoginView, meta: {unauth: true} },
-    { path: '/join', name: 'Join', component: JoinView, meta: {unauth: true} },
-    { path: '/logout', name: 'Logout', component: LoginView, meta: {unauth: true} },
     { path: '/search/:searchInput', name: 'SearchPage', component: SearchPage, meta: {auth: true}},
     { path: '/:anything(.*)*', component: NotFound },
 ];

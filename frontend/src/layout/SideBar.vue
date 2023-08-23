@@ -42,12 +42,6 @@
                 {{ a.title }}
               </router-link>
             </li>
-            <hr />
-            <li class="nav-item" data-bs-dismiss="offcanvas">
-            <router-link @click="select(title='소개')" class="nav-link" to="/introduction">
-            소개
-            </router-link>
-            </li>
           </ul>
         </div>
       </div>
@@ -109,7 +103,7 @@ export default {
 
 <style scoped>
 .navbar {
-  background: linear-gradient(to right, #90278e, #1b75bb, #4e5158);
+  background: linear-gradient(to right,#1bbbbb, #1b48bb, #681bbb);
   margin-top: 60px;
 }
 .toggleButton {

@@ -1,7 +1,7 @@
 <template>
   <footer class="footer text-center" >
-    <a href="https://strato.co.kr/bbs/page.php?hid=m05_02"><img :src="require('@/assets/images/STRATO.png')" class="FooterLogo"/></a>
-    2기 온보딩 프로젝트
+      <img :src="require('@/assets/images/kubeBoardLogo.png')" alt="Bootstrap"  height="40">
+      <span style="font-size: 25px; font-weight: bold;" class="ms-2">KubeBoard</span>
   </footer>
 </template>
 

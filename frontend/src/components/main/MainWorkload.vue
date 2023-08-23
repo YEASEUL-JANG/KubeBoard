@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <th>워크로드 상태</th>
+      <th class="card-title">워크로드 상태</th>
     </ul>
     <br/>
     <ul>
