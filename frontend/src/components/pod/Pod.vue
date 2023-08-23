@@ -46,7 +46,7 @@
 <script>
 import axios from "axios";
 import {computed, onMounted, provide, ref} from "vue";
-import { useRouter } from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import LabelList from '../common/LabelList.vue';
 import Pagination from "@/components/common/Pagination.vue";
 export default {
@@ -57,6 +57,7 @@ export default {
     setup() {
         const items = ref([]);
         const router = useRouter();
+        const route = useRoute();
         const limit = 5;
         const numberOflist = ref(0);
         const currentPage = ref(1);
@@ -76,8 +77,9 @@ export default {
         const getPodList = async (page = currentPage.value) => {
             currentPage.value = page;
             try {
+                const searchQuery = route.params.searchInput?`&search=${route.params.searchInput}`:""
                 const {data} = await axios.get(
-                    `/pod/list?page=${currentPage.value}`);
+                    `/pod/list?page=${currentPage.value}${searchQuery}`);
                 console.log("podlist:"+data)
                 items.value = data.list;
                 numberOflist.value = data.count;

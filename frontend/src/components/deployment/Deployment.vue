@@ -58,7 +58,7 @@
 <script>
 import axios from "axios";
 import {computed, onMounted, provide, ref} from "vue";
-import { useRouter } from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import LabelList from "@/components/common/LabelList.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import DeploymentModal from "@/components/deployment/DeploymentModal.vue";
@@ -68,6 +68,7 @@ export default {
   setup() {
     const items = ref([]);
     const router = useRouter();
+      const route = useRoute();
     const limit = 5;
     const currentPage = ref(1);
     const numberOflist = ref(0);
@@ -146,8 +147,9 @@ export default {
     const getdepl = async (page = currentPage.value) => {
       currentPage.value = page;
       try {
+          const searchQuery = route.params.searchInput?`&search=${route.params.searchInput}`:""
         const { data } = await axios.get(
-            `/deployment/list?page=${currentPage.value}`);
+            `/deployment/list?page=${currentPage.value}${searchQuery}`);
         items.value = data.list;
         for(let item of data.list){
             console.log("readyReplicas, replicaCount",item.readyReplicas,item.replicaCount)

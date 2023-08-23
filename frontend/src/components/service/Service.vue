@@ -13,6 +13,9 @@
       </tr>
       </thead>
         <tbody>
+        <tr v-if="items.length === 0">
+            <td colspan="8"><h5>표시할 데이터가 없습니다.</h5></td>
+        </tr>
         <tr v-for="(item, index) in items" :key="index">
             <td>{{ item.serviceName }}</td>
             <td>{{ item.type }}</td>
