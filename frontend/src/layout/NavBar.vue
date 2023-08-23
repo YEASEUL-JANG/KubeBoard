@@ -21,16 +21,6 @@
     </div>
 
     <div >
-<!--    <li class="nav-item dropdown" style="list-style: none; margin-right: 20px;">-->
-<!--          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--            <img src="@/assets/images/person-square.svg" style="height:20px"/>-->
-<!--          </a>-->
-<!--          <div>-->
-<!--          <ul class="dropdown-menu" style="z-index: 1;">-->
-<!--            <li><a class="dropdown-item" style="cursor:pointer" @click="logout">로그아웃</a></li>-->
-<!--          </ul>-->
-<!--        </div>-->
-<!--        </li>-->
       </div>
   </div>
 
