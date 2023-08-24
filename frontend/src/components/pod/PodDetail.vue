@@ -37,7 +37,7 @@
         <h5>잠시 후 다시 시도해주세요.</h5>
       </div>
     </table-slot>
-      <table-slot header="제어 정보">
+      <table-slot header="제어 정보" v-if="currentPod.ownerName != null">
           <base-spinner v-if="isLoading"></base-spinner>
           <table v-else-if="!isLoading">
               <thead>

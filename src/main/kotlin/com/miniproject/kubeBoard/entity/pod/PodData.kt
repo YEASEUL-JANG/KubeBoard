@@ -28,9 +28,9 @@ class PodData(
         val serviceAccountName: String,
         val uid: String,
         val qosClass: String,
-        val ownerName: String,
-        val ownerUid: String,
-        val ownerKind: String,
+        val ownerName: String?,
+        val ownerUid: String?,
+        val ownerKind: String?,
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,9 +49,9 @@ class PodData(
                     serviceAccountName = pod.spec.serviceAccountName,
                     uid = pod.metadata.uid,
                     qosClass = pod.status.qosClass,
-                    ownerName = pod.metadata.ownerReferences.get(0).name,
-                    ownerUid = pod.metadata.ownerReferences.get(0).uid,
-                    ownerKind = pod.metadata.ownerReferences.get(0).kind,
+                    ownerName = pod.metadata.ownerReferences?.getOrNull(0)?.name,
+                    ownerUid = pod.metadata.ownerReferences.getOrNull(0)?.uid,
+                    ownerKind = pod.metadata.ownerReferences.getOrNull(0)?.kind,
                     )
             podData.containerList.addAll(getContainerList(pod, podData))
             return podData
