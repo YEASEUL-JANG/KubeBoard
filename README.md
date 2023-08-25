@@ -157,7 +157,7 @@
 <!-- CONTACT -->
 ## Contact
 
-- YouTube : 작업예정
+- YouTube Link: [https://youtu.be/m2Sl8aQ8Fg0](https://youtu.be/m2Sl8aQ8Fg0) 
 - Project Link: [https://github.com/YEASEUL-JANG/KubeBoard](https://github.com/YEASEUL-JANG/KubeBoard)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
