@@ -27,6 +27,8 @@ class PodQuerydslRepository (
                 .where(searchCondition)
                 offset?.let {query.offset(it.toLong()) }
                 sublist?.let {query.limit(it.toLong()) }
+
+        query.orderBy(podData.createdTime.desc())
         return query.fetch()
     }
 

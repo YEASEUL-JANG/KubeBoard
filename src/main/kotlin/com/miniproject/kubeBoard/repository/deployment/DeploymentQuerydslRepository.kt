@@ -2,6 +2,7 @@ package com.miniproject.kubeBoard.repository.deployment
 
 import com.miniproject.kubeBoard.entity.deployment.DeploymentData
 import com.miniproject.kubeBoard.entity.deployment.QDeploymentData.deploymentData
+import com.miniproject.kubeBoard.entity.pod.QPodData
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
 
@@ -26,6 +27,7 @@ class DeploymentQuerydslRepository (
                 .where(searchCondition)
         offset?.let {query.offset(it.toLong()) }
         sublist?.let {query.limit(it.toLong()) }
+        query.orderBy(deploymentData.createdTime.desc())
         return query.fetch()
     }
 

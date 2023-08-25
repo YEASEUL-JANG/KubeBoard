@@ -29,6 +29,7 @@ class ServiceQuerydslRepository (
                 .where(searchCondition)
         offset?.let {query.offset(it.toLong()) }
         sublist?.let {query.limit(it.toLong()) }
+        query.orderBy(serviceData.createdTime.desc())
         return query.fetch()
     }
 
