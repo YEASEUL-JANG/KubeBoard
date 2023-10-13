@@ -1,0 +1,73 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.16'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'org.jetbrains.kotlin.jvm' version '1.6.21'
+	id 'org.jetbrains.kotlin.plugin.jpa' version '1.6.21'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21'
+	id "org.jetbrains.kotlin.plugin.allopen" version "1.6.21"
+	id "org.jetbrains.kotlin.kapt" version "1.6.21"
+}
+
+group = 'miniproject.kubeBoard'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '11'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2021.0.8")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.amqp:spring-rabbit-test'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+	//add
+	implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.21'
+	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3'
+	implementation 'com.querydsl:querydsl-jpa:5.0.0'
+	implementation 'io.fabric8:kubernetes-client:6.9.0'
+	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
+	kapt("org.springframework.boot:spring-boot-configuration-processor")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+sourceSets {
+	main {
+		java {
+			srcDirs = ["src/main/kotlin", "build/generated/source/kapt/main"]
+		}
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
