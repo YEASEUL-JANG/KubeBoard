@@ -28,10 +28,11 @@ class CorsFilter : Filter {
             )
             setHeader("Access-Control-Max-Age", "3600")
         }
-
+        //요청의 HTTP 메서드가 OPTIONS인 경우 (CORS의 preflight 요청), 응답 상태를 200 OK로 설정하고 처리를 종료
         if ("OPTIONS".equals(request.method, ignoreCase = true)) {
             response.status = HttpServletResponse.SC_OK
         } else {
+            //필터 체인의 다음 단계 진행
             chain.doFilter(req, res)
         }
     }

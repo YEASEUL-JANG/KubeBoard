@@ -34,7 +34,7 @@ dependencies {
 	implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.21'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3'
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
-	implementation 'io.fabric8:kubernetes-client:6.3.1'
+	implementation 'io.fabric8:kubernetes-client:6.9.0'
 	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 	kapt("org.springframework.boot:spring-boot-configuration-processor")
 	compileOnly 'org.projectlombok:lombok'

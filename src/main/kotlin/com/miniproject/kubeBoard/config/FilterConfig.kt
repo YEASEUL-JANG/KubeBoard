@@ -9,7 +9,7 @@ class FilterConfig {
     fun loggingFilter(): FilterRegistrationBean<CorsFilter> {
         val registrationBean = FilterRegistrationBean<CorsFilter>()
         registrationBean.filter = CorsFilter()
-        registrationBean.addUrlPatterns("/v1/*") // or other API patterns
+        registrationBean.addUrlPatterns("/v1/*") // /v1/* 패턴의 url 에 CorsFilter를 적용하도록 설정
         return registrationBean
     }
 }
