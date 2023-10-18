@@ -3,12 +3,12 @@ server:
 
 spring:
   application:
-    name: service-service
-#  rabbitmq:
-#    host: 127.0.0.1
-#    port: 5672
-#    username: admin
-#    password: admin
+    name: pod-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 
   jpa:
     hibernate:
@@ -32,13 +32,15 @@ eureka:
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
 
+
 logging:
   level:
-    com.example.service service.client: DEBUG
+    com.example.podService.client: DEBUG
 
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: refresh,health,beans,httptrace,busrefresh,info,prometheus,metrics
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,beans,httptrace,busrefresh,info,prometheus,metrics
+
 
