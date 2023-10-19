@@ -1,0 +1,77 @@
+server:
+  port: 8000
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: apigateway-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/actuator/** # 액추에이터 정보
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        -  id: user-service
+           uri: lb://USER-SERVICE
+           predicates:
+             - Path=/user-service/login #로그인 (실제 contoller에 없는 api, 스프링시큐리티에서 제공된 login api를 사용)
+             - Method=POST
+           filters:
+             - RemoveRequestHeader=Cookie
+             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        -  id: user-service
+           uri: lb://USER-SERVICE
+           predicates:
+             - Path=/user-service/users #회원가입
+             - Method=POST
+           filters:
+             - RemoveRequestHeader=Cookie
+             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        -  id: user-service
+           uri: lb://USER-SERVICE
+           predicates:
+             - Path=/user-service/** #그 외 나머지 요청 (요청 헤더안에 인증토큰있는지 검증)
+             - Method=GET
+           filters:
+             - RemoveRequestHeader=Cookie
+             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+             - AuthorizationHeaderfilter
+        - id: pod-service
+          uri: lb://POD-SERVICE
+          predicates:
+            - Path=/pod-service/**
+        - id: deployment-service
+          uri: lb://DEPLOYMENT-SERVICE
+          predicates:
+            - Path=/deployment-service/**
+        - id: service-service
+          uri: lb://SERVICE-SERVICE
+          predicates:
+            - Path=/service-service/actuator/** # 액추에이터 정보
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/service-service/(?<segment>.*),/$\{segment}
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,beans,httptrace,busrefresh,info,metrics,prometheus
