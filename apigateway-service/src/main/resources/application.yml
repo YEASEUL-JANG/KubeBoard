@@ -18,6 +18,7 @@ spring:
   cloud:
     gateway:
       routes:
+        ########## USER SERVICE
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -33,7 +34,6 @@ spring:
              - Method=POST
            filters:
              - RemoveRequestHeader=Cookie
-             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
         -  id: user-service
            uri: lb://USER-SERVICE
            predicates:
@@ -41,7 +41,6 @@ spring:
              - Method=POST
            filters:
              - RemoveRequestHeader=Cookie
-             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
         -  id: user-service
            uri: lb://USER-SERVICE
            predicates:
@@ -49,24 +48,43 @@ spring:
              - Method=GET
            filters:
              - RemoveRequestHeader=Cookie
-             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
              - AuthorizationHeaderfilter
+
+        ########## POD SERVICE
+        - id: pod-service
+          uri: lb://POD-SERVICE
+          predicates:
+            - Path=/pod-service/actuator/** # 액추에이터 정보
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/pod-service/(?<segment>.*),/$\{segment}
         - id: pod-service
           uri: lb://POD-SERVICE
           predicates:
             - Path=/pod-service/**
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-            - AuthorizationHeaderfilter
+            #- AuthorizationHeaderfilter
+
+        ########## DEPLOYMENT SERVICE
+        - id: deployment-service
+          uri: lb://DEPLOYMENT-SERVICE
+          predicates:
+            - Path=/deployment-service/actuator/** # 액추에이터 정보
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
         - id: deployment-service
           uri: lb://DEPLOYMENT-SERVICE
           predicates:
             - Path=/deployment-service/**
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-            - AuthorizationHeaderfilter
+            - RewritePath=/deployment-service/(?<segment>.*),/$\{segment}
+            #- AuthorizationHeaderfilter
+
+        ########## SERVICE SERVICE
         - id: service-service
           uri: lb://SERVICE-SERVICE
           predicates:
@@ -74,8 +92,17 @@ spring:
             - Method=GET,POST
           filters:
             - RemoveRequestHeader=Cookie
+        - id: service-service
+          uri: lb://SERVICE-SERVICE
+          predicates:
+            - Path=/service-service/**
+            - Method=GET,POST
+          filters:
+            - RemoveRequestHeader=Cookie
             - RewritePath=/service-service/(?<segment>.*),/$\{segment}
-            - AuthorizationHeaderfilter
+            #- AuthorizationHeaderfilter
+
+
 
 
 

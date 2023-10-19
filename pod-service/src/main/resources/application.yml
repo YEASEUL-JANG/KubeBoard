@@ -10,18 +10,15 @@ spring:
     username: guest
     password: guest
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
   zipkin:
     base-url: http://127.0.0.1:9411
     enabled: true
   sleuth:
     sampler:
       probability: 1.0
+  main:
+    allow-circular-references: true
+
 
 eureka:
   instance:
