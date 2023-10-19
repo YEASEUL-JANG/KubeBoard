@@ -55,10 +55,18 @@ spring:
           uri: lb://POD-SERVICE
           predicates:
             - Path=/pod-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+            - AuthorizationHeaderfilter
         - id: deployment-service
           uri: lb://DEPLOYMENT-SERVICE
           predicates:
             - Path=/deployment-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+            - AuthorizationHeaderfilter
         - id: service-service
           uri: lb://SERVICE-SERVICE
           predicates:
@@ -67,6 +75,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/service-service/(?<segment>.*),/$\{segment}
+            - AuthorizationHeaderfilter
 
 
 
