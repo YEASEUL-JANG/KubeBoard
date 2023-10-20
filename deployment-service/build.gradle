@@ -40,8 +40,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.cloud:spring-cloud-starter-config'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config:3.1.8'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:3.1.7'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
@@ -57,20 +57,19 @@ dependencies {
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 	kapt("org.springframework.boot:spring-boot-configuration-processor")
-	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
-	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap:3.1.7'
+	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:2.1.7'
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
 	implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.3.RELEASE'
 	implementation 'org.hibernate.validator:hibernate-validator:6.0.13.Final'
 	implementation 'javax.validation:validation-api:2.0.1.Final'
 	implementation 'org.glassfish:javax.el:3.0.1-b09'
 }
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-	}
-}
+//dependencyManagement {
+//	imports {
+//		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+//	}
+//}
 sourceSets {
 	main {
 		java {

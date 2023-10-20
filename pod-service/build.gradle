@@ -54,7 +54,6 @@ dependencies {
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3'
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
 	implementation 'io.fabric8:kubernetes-client:6.9.0'
-	//implementation 'io.fabric8:kubernetes-model:6.9.0'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 	kapt("org.springframework.boot:spring-boot-configuration-processor")
