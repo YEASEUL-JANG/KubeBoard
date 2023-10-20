@@ -22,6 +22,8 @@ spring:
   sleuth:
     sampler:
       probability: 1.0
+  main:
+    allow-circular-references: true
 
 eureka:
   instance:
@@ -35,7 +37,7 @@ eureka:
 
 logging:
   level:
-    com.example.deploymentService.client: DEBUG
+    com.example.serviceService.client: DEBUG
 
 management:
   endpoints:
