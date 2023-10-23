@@ -112,7 +112,7 @@ export default {
       const namespace = currentnamespace.value;
       try {
         const { data } = await axios.get(
-            `/deployment/scale?name=${ name }&namespace=${ namespace }&scale=${ setreplica }`);
+            `/deployment-service/scale?name=${ name }&namespace=${ namespace }&scale=${ setreplica }`);
 
         if (data === 1) {
           closeModal();
@@ -133,7 +133,7 @@ export default {
       const getUpdate = async () => {
           try {
               const result = await axios.get(
-                  `/deployment/batch`);
+                  `/deployment-service/batch`);
              if(result.status===200){
                  await getdepl(currentPage.value);
              }
@@ -149,7 +149,7 @@ export default {
       try {
           const searchQuery = route.params.searchInput?`&search=${route.params.searchInput}`:""
         const { data } = await axios.get(
-            `/deployment/list?page=${currentPage.value}${searchQuery}`);
+            `/deployment-service/list?page=${currentPage.value}${searchQuery}`);
         items.value = data.list;
         for(let item of data.list){
             console.log("readyReplicas, replicaCount",item.readyReplicas,item.replicaCount)

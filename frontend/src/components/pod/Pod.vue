@@ -79,7 +79,7 @@ export default {
             try {
                 const searchQuery = route.params.searchInput?`&search=${route.params.searchInput}`:""
                 const {data} = await axios.get(
-                    `/pod/list?page=${currentPage.value}${searchQuery}`);
+                    `/pod-service/list?page=${currentPage.value}${searchQuery}`);
                 console.log("podlist:"+data)
                 items.value = data.list;
                 numberOflist.value = data.count;

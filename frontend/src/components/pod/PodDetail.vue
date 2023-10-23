@@ -130,7 +130,7 @@ export default {
             isLoading.value = true
                 try {
                     const {data} = await axios.get(
-                        `/pod/list/${name}`);
+                        `/pod-service/list/${name}`);
                     console.log("podDetail :", data.list[0])
                     currentPod.value = data.list[0];
                     containerList.value = data.list[0].containerList;

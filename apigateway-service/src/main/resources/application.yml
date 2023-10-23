@@ -17,6 +17,8 @@ spring:
     password: guest
   cloud:
     gateway:
+      default-filters:
+        - name: CorsFilter
       routes:
         ########## USER SERVICE
         - id: user-service
@@ -47,6 +49,11 @@ spring:
              - Path=/user-service/** #그 외 나머지 요청 (요청 헤더안에 인증토큰있는지 검증)
              - Method=GET
            filters:
+             - name: LoggingFilter
+               args:
+                 msName: USER-SERVICE
+                 requestLogger: true
+                 responseLogger: true
              - RemoveRequestHeader=Cookie
              - AuthorizationHeaderfilter
 
@@ -64,6 +71,11 @@ spring:
           predicates:
             - Path=/pod-service/**
           filters:
+            - name: LoggingFilter
+              args:
+                msName: POD-SERVICE
+                requestLogger: true
+                responseLogger: true
             - RemoveRequestHeader=Cookie
             #- AuthorizationHeaderfilter
 
@@ -80,8 +92,12 @@ spring:
           predicates:
             - Path=/deployment-service/**
           filters:
+            - name: LoggingFilter
+              args:
+                msName: DEPLOYMENT-SERVICE
+                requestLogger: true
+                responseLogger: true
             - RemoveRequestHeader=Cookie
-            - RewritePath=/deployment-service/(?<segment>.*),/$\{segment}
             #- AuthorizationHeaderfilter
 
         ########## SERVICE SERVICE
@@ -98,9 +114,14 @@ spring:
             - Path=/service-service/**
             - Method=GET,POST
           filters:
+            - name: LoggingFilter
+              args:
+                msName: SERVICE-SERVICE
+                requestLogger: true
+                responseLogger: true
             - RemoveRequestHeader=Cookie
-            - RewritePath=/service-service/(?<segment>.*),/$\{segment}
             #- AuthorizationHeaderfilter
+
 
 
 

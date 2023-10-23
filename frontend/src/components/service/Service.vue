@@ -65,7 +65,7 @@ export default {
             currentPage.value = page;
             try {
                 const searchQuery = route.params.searchInput?`&search=${route.params.searchInput}`:""
-                const {data} = await axios.get(`/service/list?page=${currentPage.value}${searchQuery}`);
+                const {data} = await axios.get(`/service-service/list?page=${currentPage.value}${searchQuery}`);
                 console.log("serviceList : ", data)
                 items.value = data.list;
                 numberOflist.value = data.count;

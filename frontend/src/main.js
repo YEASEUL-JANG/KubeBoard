@@ -19,5 +19,5 @@ app.mount('#app');
 
 app.config.globalProperties.$axios = axios;
 
-axios.defaults.baseURL = "http://localhost:8080/v1/"
+axios.defaults.baseURL = "http://localhost:8000/"
 axios.defaults.headers.common["X-AUTH-TOKEN"] = store.getters.getToken;

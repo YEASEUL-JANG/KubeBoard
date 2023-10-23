@@ -67,7 +67,7 @@ export default {
         const deplState = reactive( { items: [] })
 
         const getPodPreview = async () => {
-            const { data } = await axios.get(`pod/listall`);
+            const { data } = await axios.get(`pod-service/listall`);
             podState.items = data.list
             podLength.value = data.count
             for(let pod of podState.items){
@@ -94,7 +94,7 @@ export default {
         }
 
         const getDeplPreview = async () => {
-            const { data } = await axios.get(`deployment/listall`);
+            const { data } = await axios.get(`deployment-service/listall`);
                 deplState.items = data.list
 
                 for (const item of deplState.items) {

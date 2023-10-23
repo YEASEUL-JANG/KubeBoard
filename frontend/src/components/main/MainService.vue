@@ -54,7 +54,7 @@ export default {
   methods: {
     getServicePreview() {
       var vm = this;
-      this.$axios.get("service/listall")
+      this.$axios.get("service-service/listall")
           .then(function (response) {
               //3개의 행만 불러온다.
             vm.serviceList = response.data.list.slice(0,3);

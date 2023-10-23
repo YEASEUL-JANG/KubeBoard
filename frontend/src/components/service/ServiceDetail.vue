@@ -93,7 +93,7 @@ export default {
         const getService = async () => {
             isLoading.value = true
             try {
-                const {data} = await axios.get(`service/list/${name}`);
+                const {data} = await axios.get(`service-service/list/${name}`);
                 console.log("service : ", data)
                 items.value = data.list[0];
                 for(let item in data.list[0].ports){

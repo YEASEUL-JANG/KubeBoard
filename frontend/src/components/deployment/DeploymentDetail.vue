@@ -143,7 +143,7 @@ export default {
     const getdepl = async () => {
       try {
         const { data } = await axios.get(
-            `/deployment/list/${ name }`
+            `/deployment-service/list/${ name }`
         );
         console.log(data);
         numberOflist.value = data.count;
