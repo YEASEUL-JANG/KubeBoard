@@ -49,7 +49,7 @@ const store = createStore({
         actions: {
             //로그인 시 아이디, 토큰을 local storage 및 store 저장
             async auth(context, payload) {
-                return axios.post(store.getters.uri + 'login', {
+                return axios.post(store.getters.uri + 'user-service/login', {
                     id: payload.id,
                     pwd: payload.pwd
                 })
@@ -83,7 +83,7 @@ const store = createStore({
                     token: null
                 });
 
-                return axios.post(store.getters.uri + 'logout', {}
+                return axios.post(store.getters.uri + 'user-service/logout', {}
                 )
             }
             ,

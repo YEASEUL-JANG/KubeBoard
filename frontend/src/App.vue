@@ -1,7 +1,7 @@
 <template>
     <div class="wrap">
-        <NavBar />
-        <SideBar/>
+        <NavBar v-if="isLogined" />
+        <SideBar v-if="isLogined"/>
         <div class="content">
             <router-view v-slot="routerView">
                 <transition name="route" mode="out-in">
@@ -9,7 +9,7 @@
                 </transition>
             </router-view>
         </div>
-        <Footer></Footer>
+        <Footer v-if="isLogined"></Footer>
     </div>
 </template>
 
@@ -25,6 +25,11 @@ export default {
         Footer,
         NavBar,
         SideBar
+    },
+    computed: {
+        isLogined() {
+            return this.$store.getters.isLogin;
+        }
     },
 }
 </script>

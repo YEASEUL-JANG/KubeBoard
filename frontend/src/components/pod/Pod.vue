@@ -1,10 +1,10 @@
 <template>
   <table-slot header="파드">
-    <base-spinner v-if="isLoading && !error"></base-spinner>
-    <table v-else-if="!isLoading && !error">
+    <base-spinner v-if="isLoading"></base-spinner>
+    <table v-else>
       <thead>
       <tr>
-        <th>파드 명</th>
+        <th>이름</th>
         <th>네임스페이스</th>
         <th>상태</th>
         <th>생성시간</th>
@@ -102,7 +102,7 @@ export default {
 
 
         return {
-            items,poddetail,numberOfPages,getPodList,currentPage
+            items,poddetail,numberOfPages,getPodList,currentPage,isLoading
 
         }
     }
