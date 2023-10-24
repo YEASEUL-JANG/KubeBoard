@@ -1,0 +1,49 @@
+server:
+  port: 0
+  #0번 포트는 랜덤포트로 생성됨
+
+spring:
+  application:
+    name: user-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: admin
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+  zipkin:
+    base-url: http://127.0.0.1:9411
+    enabled: true
+  sleuth:
+    sampler:
+      probability: 1.0 #zipkin서버에 전달할 빈도수 % (1.0은 100%)
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true #EUREKA 서버의 자원으로 등록하겠다
+    fetch-registry: true #EUREKA 서버로부터 인스턴스의 갱신정보를 주기적으로 받아올건지
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+
+greeting:
+  message: Welcome to the Simple E-commerce.
+
+logging:
+  level:
+    com.example.userservice.client: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,beans,httptrace,busrefresh,info,prometheus,metrics
+
