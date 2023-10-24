@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -40,10 +41,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/actuator/**").permitAll();
-        http.authorizeRequests().antMatchers("/**")
-                .access("hasIpAddress('192.168.6.45') or hasIpAddress('192.168.8.225')")
-                .and()
-                .addFilter(getAuthenticationFilter());
+        http.authorizeRequests()
+                .antMatchers("/user-service/**")
+                .permitAll(); // 사용자 정의 필터를 특정 경로에 적용하지 않음
+
+        http.addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.headers().frameOptions().disable();
     }

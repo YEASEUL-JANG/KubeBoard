@@ -14,6 +14,6 @@ public class RequestUser {
     private String pwd;
     @NotNull( message="Id cannot be null" )
     @Size(min=2, message = "Id not be less than 2 characters")
-    private String Id;
+    private String userId;
 
 }

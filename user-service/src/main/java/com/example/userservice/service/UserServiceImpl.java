@@ -52,11 +52,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        userDto.setUserId(UUID.randomUUID().toString());
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserEntity userEntity = mapper.map(userDto, UserEntity.class);
-        userEntity.setEncrytedPwd(passwordEncoder.encode(userDto.getPwd()));
+        userEntity.setEncryptedPwd(passwordEncoder.encode(userDto.getPwd()));
         userRepository.save(userEntity);
         UserDto returnUserDto = mapper.map(userEntity,UserDto.class);
         return returnUserDto;
@@ -64,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserByUserId(String userId) {
-        UserEntity userEntity = userRepository.findById(userId);
+        UserEntity userEntity = userRepository.findByUserId(userId);
         if(userEntity == null){
             throw new UsernameNotFoundException("User not found");
         }
@@ -96,8 +95,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserDetailsByEmail(String userId) {
-        UserEntity userEntity = userRepository.findById(userId);
+    public UserDto getUserDetailsByUserId(String userId) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
         if(userEntity == null)
             throw new UsernameNotFoundException(userId);
         return new ModelMapper().map(userEntity,UserDto.class);
@@ -106,11 +105,11 @@ public class UserServiceImpl implements UserService {
     @Override
     //전달받은 아이디를 가지고 유저를 찾아오는 메서드
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findById(userId);
+        UserEntity userEntity = userRepository.findByUserId(userId);
 
         if(userEntity == null)
             throw new UsernameNotFoundException(userId);
-        return  new User(userEntity.getEmail(), userEntity.getEncrytedPwd(),
+        return  new User(userEntity.getEmail(), userEntity.getEncryptedPwd(),
                 true, true, true, true, new ArrayList<>());
     }
 

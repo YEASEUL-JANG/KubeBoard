@@ -31,21 +31,12 @@ public class UserController {
         this.env = env;
         this.userService = userService;
     }
-    @GetMapping("/welcome")
-    @Timed(value = "users.welcome",longTask = true)
-    public String welcome(){
-        return env.getProperty("greeting.message");
-       // return greeting.getMessage();
-    }
-    @GetMapping("/health_check")
-    @Timed(value = "users.status", longTask = true)
-    public String status(){
-        return String.format("It's working in User Service "
-                + ", port(local.server.port)= "+ env.getProperty("local.server.port")
-                + ", port(server.port)= "+ env.getProperty("server.port")
-                + ", with token secret= "+ env.getProperty("token.secret")
-                + ", with token time=" + env.getProperty("token.expiration_time"));
-    }
+
+    /**
+     *  회원가입
+     * @param user
+     * @return
+     */
 
     @PostMapping("/users")
     public ResponseEntity createUser(@RequestBody RequestUser user){
@@ -58,6 +49,10 @@ public class UserController {
         ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
+    /**
+     *  회원목록
+     * @return
+     */
     @GetMapping("/users")
     public ResponseEntity<List<ResponseUser>> getUsers(){
         Iterable<UserEntity> userList = userService.getUserByAll();
@@ -67,7 +62,10 @@ public class UserController {
         });
         return ResponseEntity.ok(result);
     }
-
+    /**
+     *  상세 회원목록
+     * @return
+     */
     @GetMapping(value = "/users/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ResponseUser> getUser(@PathVariable("userId") String userId){
         UserDto userDto = userService.getUserByUserId(userId);

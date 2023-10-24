@@ -4,7 +4,7 @@ import axios from "axios";
 const store = createStore({
         //데이터 상태 관리
         state: {
-            id: localStorage.getItem('id'),
+            id: localStorage.getItem('userId'),
             token: localStorage.getItem('token'),
             uri: process.env.VUE_APP_URI
         },

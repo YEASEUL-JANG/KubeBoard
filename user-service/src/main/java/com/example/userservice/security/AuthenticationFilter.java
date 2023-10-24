@@ -45,7 +45,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             //로그인 데이터를 UsernamePasswordAuthenticationToken 에 저장하고 인증처리에 대한 요청을 한다.
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            creds.getId(),
+                            creds.getUserId(),
                             creds.getPwd(),
                             new ArrayList<>() //권한에 대한 부분
                     )
@@ -59,8 +59,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-       String userName =  ((User)authResult.getPrincipal()).getUsername();
-       UserDto userDetails = userService.getUserDetailsByEmail(userName);
+       String userId = ((User) authResult.getPrincipal()).getUsername();
+       UserDto userDetails = userService.getUserDetailsByUserId(userId);
 
         String token = Jwts.builder()
                 .setSubject(userDetails.getUserId())
@@ -69,6 +69,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .signWith(SignatureAlgorithm.HS512, environment.getProperty("token.secret"))
                 .compact();
            response.addHeader("token", token);
-           response.addHeader("id", userDetails.getUserId());
+           response.addHeader("userId", userDetails.getUserId());
     }
 }

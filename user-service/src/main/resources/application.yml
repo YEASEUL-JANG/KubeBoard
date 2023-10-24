@@ -8,15 +8,9 @@ spring:
   rabbitmq:
     host: 127.0.0.1
     port: 5672
-    username: admin
-    password: admin
+    username: guest
+    password: guest
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
   zipkin:
     base-url: http://127.0.0.1:9411
     enabled: true
@@ -28,18 +22,18 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
-    register-with-eureka: true #EUREKA 서버의 자원으로 등록하겠다
-    fetch-registry: true #EUREKA 서버로부터 인스턴스의 갱신정보를 주기적으로 받아올건지
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
 
 
-greeting:
-  message: Welcome to the Simple E-commerce.
-
 logging:
   level:
     com.example.userservice.client: DEBUG
+    org:
+      springframework:
+        security: DEBUG
 
 management:
   endpoints:

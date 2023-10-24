@@ -17,10 +17,10 @@ public class UserEntity {
     private String email;
 
     @Column(nullable = false, unique = true)
-    private String id;
+    private String userId;
 
     @Column(nullable = false, unique = true)
-    private String encrytedPwd;
+    private String encryptedPwd;
 
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date createdAt;
