@@ -39,7 +39,7 @@ public class UserController {
      */
 
     @PostMapping("/users")
-    public ResponseEntity createUser(@RequestBody RequestUser user){
+    public ResponseEntity<ResponseUser> createUser(@RequestBody RequestUser user){
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -71,6 +71,21 @@ public class UserController {
         UserDto userDto = userService.getUserByUserId(userId);
         ResponseUser responseUser = new ModelMapper().map(userDto,ResponseUser.class);
         return ResponseEntity.ok(responseUser);
+    }
+    /**
+     *  회원가입
+     * @param userId
+     * @return
+     */
+
+    @PostMapping("/idCheck")
+    public ResponseEntity idCheck(@RequestBody String userId){
+        int userCount = userService.duplicateUser(userId);
+        boolean isValid = false;
+        if(userCount==0){
+            isValid = true;
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(isValid);
     }
 
 }

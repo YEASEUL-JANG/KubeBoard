@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -50,6 +51,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/login","/user-service/**")
                 .permitAll(); // 사용자 정의 필터를 특정 경로에 적용하지 않음
+        http.logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/user-service/logout"))
+                .invalidateHttpSession(true)
+                .clearAuthentication(true) // 인증 정보를 지웁니다.
+                .deleteCookies("JSESSIONID"); // 로그아웃 후 리다이렉트될 URL (선택사항)
 
         http.addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

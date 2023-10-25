@@ -52,10 +52,10 @@ export default {
             const inputId = userId.value;
 
             // 아이디 중복 확인
-            axios.post(store.getters.uri + 'user-service/idCheck', {
+            axios.post( 'user-service/idCheck', {
                 "userId": inputId,
             }).then((response) => {
-                isValid.value = (response.data !== 1)
+                isValid.value = response.data.isValid
             });
         };
 

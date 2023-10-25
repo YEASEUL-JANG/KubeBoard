@@ -103,6 +103,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int duplicateUser(String userId) {
+       return (int) userRepository.countByUserId(userId);
+    }
+
+    @Override
     //전달받은 아이디를 가지고 유저를 찾아오는 메서드
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByUserId(userId);

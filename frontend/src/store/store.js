@@ -89,7 +89,7 @@ const store = createStore({
                     token: null
                 });
 
-                return axios.post(store.getters.uri + 'user-service/logout', {}
+                return axios.post('/user-service/logout', {}
                 )
             }
             ,
