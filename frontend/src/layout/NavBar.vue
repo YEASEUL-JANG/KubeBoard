@@ -21,7 +21,18 @@
     </ul>
     </div>
 
-    <div >
+      <div >
+          <li class="nav-item dropdown" style="list-style: none; margin-right: 20px;">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="@/assets/images/person-square.svg" style="height:20px"/>
+                  {{ idCheck }}
+              </a>
+              <div>
+                  <ul class="dropdown-menu" style="z-index: 1;">
+                      <li><a class="dropdown-item" style="cursor:pointer" @click="logout">로그아웃</a></li>
+                  </ul>
+              </div>
+          </li>
       </div>
   </div>
 
@@ -31,8 +42,9 @@
 </template>
 
 <script>
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import {useRoute, useRouter} from "vue-router";
+import store from "@/store/store";
 
 export default {
     name: 'NavBar',
@@ -58,9 +70,19 @@ export default {
                 console.log(searchInput.value);
             }
         })
+        const logout = () => {
+            store.dispatch('logout');
+            location.href = '/login';
+        };
+
+        // computed 속성
+        const idCheck = computed(() => store.getters.getId);
+
         return {
-            searchInput,
-            search,
+            searchInput, // 템플릿에서 사용하기 위해 반환합니다.
+            search,      // 동일
+            logout,      // 동일
+            idCheck      // 동일
         };
     }
 }

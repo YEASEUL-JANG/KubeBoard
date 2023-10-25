@@ -5,9 +5,9 @@
       <h1 class="h3 mb-3 mt-2 fw-normal">Create account</h1>
 
       <div class="col-md-12 mt-1 text-start">
-        <label for="id" class="form-label">아이디</label>
-        <input type="text" class="form-control" name="id" :value="id" @keyup="idCheck" @keydown.space.prevent required>
-        <div v-if="id !== '' && !isFinish"><font id="feedback" size="2">{{ validCheck }}</font></div>
+        <label for="userId" class="form-label">아이디</label>
+        <input type="text" class="form-control" name="userId" :value="userId" @keyup="idCheck" @keydown.space.prevent required>
+        <div v-if="userId !== '' && !isFinish"><font id="feedback" size="2">{{ validCheck }}</font></div>
       </div>
 
       <div class="col-md-12 mt-2 text-start">
@@ -38,7 +38,7 @@ export default {
     components: { LoginForm },
 
     setup() {
-        const id = ref("");
+        const userId = ref("");
         const pwd = ref("");
         const isValid = ref(false);
         const isFinish = ref(false);
@@ -46,14 +46,14 @@ export default {
         const isBlank2 = ref(true);
 
         const idCheck = (e) => {
-            id.value = e.target.value.trim();
-            e.target.value = id.value;
+            userId.value = e.target.value.trim();
+            e.target.value = userId.value;
 
-            const inputId = id.value;
+            const inputId = userId.value;
 
             // 아이디 중복 확인
-            axios.post(store.getters.uri + 'user-service/idCheck.do', {
-                "id": inputId,
+            axios.post(store.getters.uri + 'user-service/idCheck', {
+                "userId": inputId,
             }).then((response) => {
                 isValid.value = (response.data !== 1)
             });
@@ -74,7 +74,7 @@ export default {
             }
 
             axios.post(store.getters.uri + 'user-service/join', {
-                "id": id.value,
+                "userId": userId.value,
                 "pwd": pwd.value
             }).then(() => {
                 isFinish.value = true;
@@ -93,15 +93,15 @@ export default {
         });
 
         // 입력값이 빈 문자열인지 여부 확인
-        watch(id, (newVal) => {
+        watch(userId.value, (newVal) => {
             isBlank.value = newVal === '';
         });
 
-        watch(pwd, (newVal) => {
+        watch(pwd.value, (newVal) => {
             isBlank2.value = newVal === '';
         });
 
-        return { id, pwd, isValid, isFinish, isBlank, isBlank2, idCheck, join, moveLink, validCheck };
+        return { userId, pwd, isValid, isFinish, isBlank, isBlank2, idCheck, join, moveLink, validCheck };
     },
 };
 </script>

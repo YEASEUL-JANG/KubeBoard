@@ -17,34 +17,51 @@ spring:
     password: guest
   cloud:
     gateway:
-      default-filters:
-        - name: CorsFilter
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: 'http://localhost:8081'
+            allow-credentials: true
+            allowedHeaders: '*'
+            allowedMethods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
       routes:
         ########## USER SERVICE
-        - id: user-service
+        - id: user-service-actuator
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/actuator/** # 액추에이터 정보
             - Method=GET,POST
           filters:
-            - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        -  id: user-service
+        -  id: user-service-login
            uri: lb://USER-SERVICE
            predicates:
              - Path=/user-service/login #로그인 (실제 contoller에 없는 api, 스프링시큐리티에서 제공된 login api를 사용)
-             - Method=POST
+             - Method=POST,OPTIONS
            filters:
-             - RemoveRequestHeader=Cookie
+             - name: LoggingFilter
+               args:
+                 msName: USER-SERVICE
+                 requestLogger: true
+                 responseLogger: true
              - RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        -  id: user-service
+        -  id: user-service-register
            uri: lb://USER-SERVICE
            predicates:
              - Path=/user-service/users #회원가입
-             - Method=POST
+             - Method=POST,OPTIONS
            filters:
-             - RemoveRequestHeader=Cookie
-        -  id: user-service
+             - name: LoggingFilter
+               args:
+                 msName: USER-SERVICE
+                 requestLogger: true
+                 responseLogger: true
+        -  id: user-service-general
            uri: lb://USER-SERVICE
            predicates:
              - Path=/user-service/** #그 외 나머지 요청 (요청 헤더안에 인증토큰있는지 검증)
@@ -55,19 +72,17 @@ spring:
                  msName: USER-SERVICE
                  requestLogger: true
                  responseLogger: true
-             - RemoveRequestHeader=Cookie
              - AuthorizationHeaderfilter
 
         ########## POD SERVICE
-        - id: pod-service
+        - id: pod-service-actuator
           uri: lb://POD-SERVICE
           predicates:
             - Path=/pod-service/actuator/** # 액추에이터 정보
-            - Method=GET,POST
+            - Method=GET,POST,OPTIONS
           filters:
-            - RemoveRequestHeader=Cookie
             - RewritePath=/pod-service/(?<segment>.*),/$\{segment}
-        - id: pod-service
+        - id: pod-service-general
           uri: lb://POD-SERVICE
           predicates:
             - Path=/pod-service/**
@@ -77,18 +92,17 @@ spring:
                 msName: POD-SERVICE
                 requestLogger: true
                 responseLogger: true
-            - RemoveRequestHeader=Cookie
             #- AuthorizationHeaderfilter
 
         ########## DEPLOYMENT SERVICE
-        - id: deployment-service
+        - id: deployment-service-actuator
           uri: lb://DEPLOYMENT-SERVICE
           predicates:
             - Path=/deployment-service/actuator/** # 액추에이터 정보
-            - Method=GET,POST
+            - Method=GET,POST,OPTIONS
           filters:
-            - RemoveRequestHeader=Cookie
-        - id: deployment-service
+            - RewritePath=/deployment-service/(?<segment>.*),/$\{segment}
+        - id: deployment-service-general
           uri: lb://DEPLOYMENT-SERVICE
           predicates:
             - Path=/deployment-service/**
@@ -98,29 +112,27 @@ spring:
                 msName: DEPLOYMENT-SERVICE
                 requestLogger: true
                 responseLogger: true
-            - RemoveRequestHeader=Cookie
             #- AuthorizationHeaderfilter
 
         ########## SERVICE SERVICE
-        - id: service-service
+        - id: service-service-actuator
           uri: lb://SERVICE-SERVICE
           predicates:
             - Path=/service-service/actuator/** # 액추에이터 정보
             - Method=GET,POST
           filters:
-            - RemoveRequestHeader=Cookie
-        - id: service-service
+            - RewritePath=/service-service/(?<segment>.*),/$\{segment}
+        - id: service-service-general
           uri: lb://SERVICE-SERVICE
           predicates:
             - Path=/service-service/**
-            - Method=GET,POST
+            - Method=GET,POST,OPTIONS
           filters:
             - name: LoggingFilter
               args:
                 msName: SERVICE-SERVICE
                 requestLogger: true
                 responseLogger: true
-            - RemoveRequestHeader=Cookie
             #- AuthorizationHeaderfilter
 
 

@@ -4,7 +4,7 @@ import axios from "axios";
 const store = createStore({
         //데이터 상태 관리
         state: {
-            id: localStorage.getItem('userId'),
+            userId: localStorage.getItem('userId'),
             token: localStorage.getItem('token'),
             uri: process.env.VUE_APP_URI
         },
@@ -13,18 +13,18 @@ const store = createStore({
         getters: {
             //아이디, 토큰 받아오는 용도
             getLogin(state) {
-                return (state.id, state.token);
+                return (state.userId, state.token);
             },
 
             //유효성 검사 용도
             isLogin(state) {
-                console.log(state.id, state.token)
-                return state.id !== null && state.token !== null
+                console.log(state.userId, state.token)
+                return state.userId !== null && state.token !== null
             },
 
             //아이디만 받아오는 용도
             getId(state) {
-                return state.id;
+                return state.userId;
             },
 
             //토큰만 받아오는 용도
@@ -40,7 +40,7 @@ const store = createStore({
         //state를 변경시키는 역할
         mutations: {
             setData(state, fetchedData) {
-                state.id = fetchedData.id;
+                state.userId = fetchedData.userId;
                 state.token = fetchedData.token;
             },
         },
@@ -49,37 +49,43 @@ const store = createStore({
         actions: {
             //로그인 시 아이디, 토큰을 local storage 및 store 저장
             async auth(context, payload) {
-                return axios.post(store.getters.uri + 'user-service/login', {
-                    id: payload.id,
+                return axios.post('/user-service/login', {
+                    userId: payload.userId,
                     pwd: payload.pwd
                 })
                     .then(response => {
                         if (response.status < 400) {
-                            return response.data;
+                            console.log(response)
+                            const token = response.headers['token'];
+
+                            if (token) {
+                                localStorage.setItem('userId', payload.userId);
+                                localStorage.setItem('token', token);
+                                context.commit('setData', {
+                                    userId: payload.userId,
+                                    token: token
+                                });
+                                return response.data;
+                            } else {
+                                throw new Error("Token not found in response headers.");
+                            }
                         } else {
-                            throw new Error();
+                            throw new Error("Invalid response status.");
                         }
                     })
-                    .then((data) => {
-                        localStorage.setItem('id', payload.id);
-                        localStorage.setItem('token', data);
-                        context.commit('setData', {
-                            id: payload.id,
-                            token: data
-                        })
-                    })
                     .catch((error) => {
+                        console.error(error);
                         return error.message;
                     });
             },
 
 //로그아웃
             logout(context) {
-                localStorage.removeItem('id');
+                localStorage.removeItem('userId');
                 localStorage.removeItem('token');
 
                 context.commit('setData', {
-                    id: null,
+                    userId: null,
                     token: null
                 });
 

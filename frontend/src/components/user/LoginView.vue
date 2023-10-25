@@ -5,7 +5,7 @@
       <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
       <div class="form-floating">
-        <input type="text" class="form-control" name="id" v-model="id">
+        <input type="text" class="form-control" name="userId" v-model="userId">
         <label for="id">아이디</label>
       </div>
 
@@ -36,13 +36,13 @@ export default {
 
     setup() {
         const loginSuccess = ref(false);
-        const id = ref("");
+        const userId = ref("");
         const pwd = ref("");
 
         // 로그인 성공 시 해당 페이지로 이동
-        watch(loginSuccess => {
-            if (loginSuccess) {
-                axios.defaults.headers.common["X-AUTH-TOKEN"]=store.getters.getToken();
+        watch(loginSuccess,(newVal) => {
+            if (newVal) {
+                axios.defaults.headers.common["AUTHORIZATION"]=store.getters.getToken;
                 router.replace("/");
             }
         });
@@ -51,12 +51,12 @@ export default {
         async function login() {
             // store actions 내의 auth 함수 실행, 전달인자 id, pwd
             await store.dispatch("auth", {
-                id: id.value,
+                userId: userId.value,
                 pwd: pwd.value,
             });
 
             // store 아이디, 토큰 정보 여부 확인
-            loginSuccess.value = store.getters.getLogin ? true : false;
+            loginSuccess.value = store.getters.isLogin;
             if (!loginSuccess.value) alert("아이디 또는 비밀번호가 틀렸습니다.");
         }
 
@@ -65,7 +65,7 @@ export default {
             router.push('/join')
         }
 
-        return { loginSuccess, id, pwd, login, moveLink };
+        return { loginSuccess, userId, pwd, login, moveLink };
     },
 };
 </script>

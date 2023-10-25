@@ -7,6 +7,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.OrderedGatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -21,20 +22,19 @@ public class LoggingFilter extends AbstractGatewayFilterFactory<LoggingFilter.Co
 
     @Override
     public GatewayFilter apply(Config config) {
-        GatewayFilter filter = new OrderedGatewayFilter((exchange, chain) -> {
-            ServerHttpRequest request = exchange.getRequest();
+        return (exchange, chain) -> {
+            log.info("start logging filter");
             ServerHttpResponse response = exchange.getResponse();
 
             if(config.isRequestLogger()){
-               log.info("[{}] Request start ",config.getMsName());
+                log.info("[{}] Request start ",config.getMsName());
             }
-            return chain.filter(exchange).then(Mono.fromRunnable(()->{
+            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 if(config.isResponseLogger()){
                     log.info("[{}] Response end -> {}",config.getMsName(), response.getStatusCode());
                 }
             }));
-        }, Ordered.HIGHEST_PRECEDENCE);
-        return  filter;
+        };
     }
 
     @Data
