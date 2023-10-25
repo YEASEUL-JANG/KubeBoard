@@ -79,10 +79,10 @@ public class UserController {
      */
 
     @PostMapping("/idCheck")
-    public ResponseEntity idCheck(@RequestBody String userId){
+    public ResponseEntity<Boolean> idCheck(@RequestBody String userId){
         int userCount = userService.duplicateUser(userId);
         boolean isValid = false;
-        if(userCount==0){
+        if(userCount == 0){
             isValid = true;
         }
         return ResponseEntity.status(HttpStatus.OK).body(isValid);

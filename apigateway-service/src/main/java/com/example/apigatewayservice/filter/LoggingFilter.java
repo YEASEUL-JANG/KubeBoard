@@ -23,7 +23,6 @@ public class LoggingFilter extends AbstractGatewayFilterFactory<LoggingFilter.Co
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            log.info("start logging filter");
             ServerHttpResponse response = exchange.getResponse();
 
             if(config.isRequestLogger()){

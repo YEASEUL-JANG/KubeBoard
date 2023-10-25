@@ -50,6 +50,17 @@ spring:
                  requestLogger: true
                  responseLogger: true
              - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service-idCheck
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/idCheck #로그아웃
+            - Method=POST,OPTIONS
+          filters:
+            - name: LoggingFilter
+              args:
+                msName: USER-SERVICE
+                requestLogger: true
+                responseLogger: true
         -  id: user-service-register
            uri: lb://USER-SERVICE
            predicates:

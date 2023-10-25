@@ -9,6 +9,10 @@
         <input type="text" class="form-control" name="userId" :value="userId" @keyup="idCheck" @keydown.space.prevent required>
         <div v-if="userId !== '' && !isFinish"><font id="feedback" size="2">{{ validCheck }}</font></div>
       </div>
+        <div class="col-md-12 mt-2 text-start">
+            <label for="userId" class="form-label">이메일</label>
+            <input type="text" class="form-control" name="email" v-model="email" @keydown.space.prevent required>
+        </div>
 
       <div class="col-md-12 mt-2 text-start">
         <label for="pwd" class="form-label">비밀번호</label>
@@ -30,7 +34,6 @@
 import { ref, watch,computed } from "vue";
 import LoginForm from "@/components/user/LoginForm.vue";
 import axios from "axios";
-import store from "@/store/store";
 import router from "@/router";
 
 export default {
@@ -40,10 +43,12 @@ export default {
     setup() {
         const userId = ref("");
         const pwd = ref("");
+        const email = ref("");
         const isValid = ref(false);
         const isFinish = ref(false);
-        const isBlank = ref(true);
-        const isBlank2 = ref(true);
+        const userIdBlank = ref(true);
+        const pwdBlank = ref(true);
+        const emailBlank = ref(true);
 
         const idCheck = (e) => {
             userId.value = e.target.value.trim();
@@ -55,17 +60,22 @@ export default {
             axios.post( 'user-service/idCheck', {
                 "userId": inputId,
             }).then((response) => {
-                isValid.value = response.data.isValid
+                console.log(response)
+                isValid.value = response.data
             });
         };
 
         const join = () => {
-            if (isBlank.value) {
+            if (userIdBlank.value) {
                 alert("아이디를 입력해주세요.");
                 return;
             }
-            if (isBlank2.value) {
+            if (pwdBlank.value) {
                 alert("비밀번호를 입력해주세요.");
+                return;
+            }
+            if (emailBlank.value) {
+                alert("이메일을 입력해주세요.");
                 return;
             }
             if (!isValid.value) {
@@ -73,8 +83,9 @@ export default {
                 return;
             }
 
-            axios.post(store.getters.uri + 'user-service/join', {
+            axios.post('user-service/users', {
                 "userId": userId.value,
+                "email": email.value,
                 "pwd": pwd.value
             }).then(() => {
                 isFinish.value = true;
@@ -93,15 +104,18 @@ export default {
         });
 
         // 입력값이 빈 문자열인지 여부 확인
-        watch(userId.value, (newVal) => {
-            isBlank.value = newVal === '';
+        watch(userId, (newVal) => {
+            userIdBlank.value = newVal === '';
         });
 
-        watch(pwd.value, (newVal) => {
-            isBlank2.value = newVal === '';
+        watch(pwd, (newVal) => {
+            pwdBlank.value = newVal === '';
+        });
+        watch(email, (newVal) => {
+            emailBlank.value = newVal === '';
         });
 
-        return { userId, pwd, isValid, isFinish, isBlank, isBlank2, idCheck, join, moveLink, validCheck };
+        return { userId,email, pwd, isValid, isFinish, userIdBlank, pwdBlank,emailBlank, idCheck, join, moveLink, validCheck };
     },
 };
 </script>
