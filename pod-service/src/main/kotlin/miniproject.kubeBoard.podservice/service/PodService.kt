@@ -53,20 +53,47 @@ class PodService (
         val count = podQuerydslRepository.getSearchPodList(search,null,null).size
         return PodListResponse(count,podList)
     }
+    fun getPodStatus(namespace: String, name: String): String? {
+        return podClient.getPodStatus(namespace, name);
+    }
+
     @Transactional
     fun createPod(podCreateRequest: PodCreateRequest): String {
         podClient.createPod(podCreateRequest);
+        val maxAttempts = 10
+        var currentAttempt = 0
         runBlocking {
+            while (currentAttempt < maxAttempts){
+                val status = getPodStatus(podCreateRequest.namespace,podCreateRequest.name)
+                if(status.equals("Running", ignoreCase = true)) {
+                    syncPodList()
+                    break
+                }
+            }
             delay(2000)
-            syncPodList() }
-        return podCreateRequest.podName
+            currentAttempt++
+             }
+        return podCreateRequest.name
     }
     @Transactional
-    fun deletePod(podDeleteRequest: PodDeleteRequest) {
+    fun deletePod(podDeleteRequest: PodDeleteRequest): Boolean {
         podClient.deletePod(podDeleteRequest)
+        val maxAttempts = 10
+        var currentAttempt = 0
+        var isPodDeleted = false
         runBlocking {
-            delay(2000)
-            syncPodList() }
+            while (currentAttempt < maxAttempts){
+                val status = getPodStatus(podDeleteRequest.namespace,podDeleteRequest.name)
+                if(status == null){
+                    isPodDeleted = true
+                    syncPodList()
+                    break
+                }
+                delay(2000)
+                currentAttempt++
+            }
+        }
+        return isPodDeleted;
     }
 
 }

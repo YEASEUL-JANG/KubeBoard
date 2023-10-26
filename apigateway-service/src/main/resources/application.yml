@@ -90,47 +90,46 @@ spring:
           uri: lb://POD-SERVICE
           predicates:
             - Path=/pod-service/actuator/** # 액추에이터 정보
-            - Method=GET,POST,OPTIONS
           filters:
             - RewritePath=/pod-service/(?<segment>.*),/$\{segment}
         - id: pod-service-general
           uri: lb://POD-SERVICE
           predicates:
             - Path=/pod-service/**
+            - Method=GET,POST,OPTIONS
           filters:
             - name: LoggingFilter
               args:
                 msName: POD-SERVICE
                 requestLogger: true
                 responseLogger: true
-            #- AuthorizationHeaderfilter
+            - AuthorizationHeaderfilter
 
         ########## DEPLOYMENT SERVICE
         - id: deployment-service-actuator
           uri: lb://DEPLOYMENT-SERVICE
           predicates:
             - Path=/deployment-service/actuator/** # 액추에이터 정보
-            - Method=GET,POST,OPTIONS
           filters:
             - RewritePath=/deployment-service/(?<segment>.*),/$\{segment}
         - id: deployment-service-general
           uri: lb://DEPLOYMENT-SERVICE
           predicates:
             - Path=/deployment-service/**
+            - Method=GET,POST,OPTIONS
           filters:
             - name: LoggingFilter
               args:
                 msName: DEPLOYMENT-SERVICE
                 requestLogger: true
                 responseLogger: true
-            #- AuthorizationHeaderfilter
+            - AuthorizationHeaderfilter
 
         ########## SERVICE SERVICE
         - id: service-service-actuator
           uri: lb://SERVICE-SERVICE
           predicates:
             - Path=/service-service/actuator/** # 액추에이터 정보
-            - Method=GET,POST
           filters:
             - RewritePath=/service-service/(?<segment>.*),/$\{segment}
         - id: service-service-general
@@ -144,7 +143,7 @@ spring:
                 msName: SERVICE-SERVICE
                 requestLogger: true
                 responseLogger: true
-            #- AuthorizationHeaderfilter
+            - AuthorizationHeaderfilter
 
 
 

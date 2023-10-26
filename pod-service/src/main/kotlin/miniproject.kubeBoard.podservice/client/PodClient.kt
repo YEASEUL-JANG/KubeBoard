@@ -30,13 +30,27 @@ class PodClient(
         client.pods().inNamespace(podCreateRequest.namespace).create(
             PodBuilder()
                 .withNewMetadata()
-                .withName(podCreateRequest.podName)
+                .withName(podCreateRequest.name)
                 .endMetadata()
+                .withNewSpec()
+                .addNewContainer()
+                .withName("nginx")
+                .withImage("nginx:1.14")
+                .endContainer()
+                .endSpec()
                 .build()
         )
     }
 
     fun deletePod(podDeleteRequest: PodDeleteRequest) {
-        client.pods().inNamespace(podDeleteRequest.namespace).withName(podDeleteRequest.podName).delete()
+        client.pods().inNamespace(podDeleteRequest.namespace).withName(podDeleteRequest.name).delete()
+    }
+
+    fun getPodStatus(namespace: String, name: String): String? {
+        val getPod = client.pods().inNamespace(namespace).withName(name).get()
+        if(getPod != null){
+            return getPod.status.phase
+        }
+        return null
     }
 }

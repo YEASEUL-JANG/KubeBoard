@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.api.model.Pod
 import miniproject.kubeBoard.podservice.entity.pod.req.PodCreateRequest
 import miniproject.kubeBoard.podservice.entity.pod.req.PodDeleteRequest
 import org.springframework.web.bind.annotation.*
+import kotlin.math.log
 
 @RestController
 @RequestMapping("/pod-service")
@@ -30,8 +31,8 @@ class PodController (
      * pod 삭제
      */
     @PostMapping("/delete")
-    fun deletePod(@RequestBody podDeleteRequest: PodDeleteRequest) {
-        podService.deletePod(podDeleteRequest)
+    fun deletePod(@RequestBody podDeleteRequest: PodDeleteRequest): Boolean {
+        return podService.deletePod(podDeleteRequest)
     }
 
     /**
@@ -55,7 +56,7 @@ class PodController (
      */
     @GetMapping("/list")
     fun getPodList(
-            @RequestParam(value = "createPod", required = true)search: String?,
+            @RequestParam(value = "search", required = false, defaultValue = "")search: String?,
             @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
     ): PodListResponse {
         val offset= (page-1)*5
