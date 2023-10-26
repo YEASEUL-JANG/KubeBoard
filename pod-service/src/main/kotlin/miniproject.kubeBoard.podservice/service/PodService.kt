@@ -5,6 +5,10 @@ import miniproject.kubeBoard.podservice.entity.pod.res.PodListResponse
 import miniproject.kubeBoard.podservice.repository.pod.PodQuerydslRepository
 import miniproject.kubeBoard.podservice.repository.pod.PodRepository
 import io.fabric8.kubernetes.api.model.Pod
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import miniproject.kubeBoard.podservice.entity.pod.req.PodCreateRequest
+import miniproject.kubeBoard.podservice.entity.pod.req.PodDeleteRequest
 import miniproject.kubeBoard.podservice.repository.pod.ContainerQuerydslRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -48,6 +52,21 @@ class PodService (
         val podList = podQuerydslRepository.getSearchPodList(search,offset,sublist)
         val count = podQuerydslRepository.getSearchPodList(search,null,null).size
         return PodListResponse(count,podList)
+    }
+    @Transactional
+    fun createPod(podCreateRequest: PodCreateRequest): String {
+        podClient.createPod(podCreateRequest);
+        runBlocking {
+            delay(2000)
+            syncPodList() }
+        return podCreateRequest.podName
+    }
+    @Transactional
+    fun deletePod(podDeleteRequest: PodDeleteRequest) {
+        podClient.deletePod(podDeleteRequest)
+        runBlocking {
+            delay(2000)
+            syncPodList() }
     }
 
 }

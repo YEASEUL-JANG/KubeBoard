@@ -3,7 +3,10 @@ package miniproject.kubeBoard.podservice.client
 import miniproject.kubeBoard.podservice.entity.pod.PodData
 import io.fabric8.kubernetes.api.model.Pod
 import io.fabric8.kubernetes.client.KubernetesClient
+import miniproject.kubeBoard.podservice.entity.pod.req.PodCreateRequest
 import org.springframework.stereotype.Service
+import io.fabric8.kubernetes.api.model.PodBuilder;
+import miniproject.kubeBoard.podservice.entity.pod.req.PodDeleteRequest
 
 @Service
 class PodClient(
@@ -21,5 +24,19 @@ class PodClient(
     }
     fun getPodClientList(): MutableList<Pod>? {
         return client.pods()?.list()?.items
+    }
+
+    fun createPod(podCreateRequest: PodCreateRequest) {
+        client.pods().inNamespace(podCreateRequest.namespace).create(
+            PodBuilder()
+                .withNewMetadata()
+                .withName(podCreateRequest.podName)
+                .endMetadata()
+                .build()
+        )
+    }
+
+    fun deletePod(podDeleteRequest: PodDeleteRequest) {
+        client.pods().inNamespace(podDeleteRequest.namespace).withName(podDeleteRequest.podName).delete()
     }
 }

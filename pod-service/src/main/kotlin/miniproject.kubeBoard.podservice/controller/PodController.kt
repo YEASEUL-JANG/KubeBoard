@@ -3,11 +3,9 @@ package miniproject.kubeBoard.podservice.controller
 import miniproject.kubeBoard.podservice.entity.pod.res.PodListResponse
 import miniproject.kubeBoard.podservice.service.PodService
 import io.fabric8.kubernetes.api.model.Pod
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import miniproject.kubeBoard.podservice.entity.pod.req.PodCreateRequest
+import miniproject.kubeBoard.podservice.entity.pod.req.PodDeleteRequest
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/pod-service")
@@ -20,6 +18,20 @@ class PodController (
     @GetMapping("/client/list")
     fun getPodClientList(): MutableList<Pod>? {
         return podService.getPodClientList()
+    }
+    /**
+     * pod 생성
+     */
+    @PostMapping("/create")
+    fun createPod(@RequestBody podCreateRequest: PodCreateRequest): String {
+        return podService.createPod(podCreateRequest)
+    }
+    /**
+     * pod 삭제
+     */
+    @PostMapping("/delete")
+    fun deletePod(@RequestBody podDeleteRequest: PodDeleteRequest) {
+        podService.deletePod(podDeleteRequest)
     }
 
     /**
@@ -43,7 +55,7 @@ class PodController (
      */
     @GetMapping("/list")
     fun getPodList(
-            @RequestParam(value = "search", required = false, defaultValue = "")search: String?,
+            @RequestParam(value = "createPod", required = true)search: String?,
             @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
     ): PodListResponse {
         val offset= (page-1)*5
