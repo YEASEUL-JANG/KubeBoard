@@ -3,11 +3,9 @@ package miniproject.kubeBoard.deploymentservice.controller
 import miniproject.kubeBoard.deploymentservice.entity.deployment.res.DeploymentListResponse
 import miniproject.kubeBoard.deploymentservice.service.DeploymentService
 import io.fabric8.kubernetes.api.model.apps.Deployment
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentCreateRequest
+import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentDeleteRequest
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/deployment-service")
@@ -20,6 +18,21 @@ class DeploymentController (
     @GetMapping("/client/list")
     fun getDeploymentClientList(): MutableList<Deployment>? {
         return deploymentService.getDeploymentClientList()
+    }
+
+    /**
+     * deployment 생성
+     */
+    @PostMapping("/create")
+    fun createPod(@RequestBody deploymentCreateRequest: DeploymentCreateRequest): String {
+        return deploymentService.createDeployment(deploymentCreateRequest)
+    }
+    /**
+     * deployment 삭제
+     */
+    @PostMapping("/delete")
+    fun deletePod(@RequestBody deploymentDeleteRequest: DeploymentDeleteRequest): Boolean {
+        return deploymentService.deleteDeployment(deploymentDeleteRequest)
     }
 
     /**

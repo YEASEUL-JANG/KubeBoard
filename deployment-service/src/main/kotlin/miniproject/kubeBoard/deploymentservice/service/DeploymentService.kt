@@ -5,7 +5,11 @@ import miniproject.kubeBoard.deploymentservice.entity.deployment.res.DeploymentL
 import miniproject.kubeBoard.deploymentservice.repository.deployment.DeploymentQuerydslRepository
 import miniproject.kubeBoard.deploymentservice.repository.deployment.DeploymentRepository
 import io.fabric8.kubernetes.api.model.apps.Deployment
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import miniproject.kubeBoard.deploymentservice.repository.deployment.ConditionQuerydslRepository
+import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentCreateRequest
+import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentDeleteRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
@@ -52,6 +56,47 @@ class DeploymentService (
         val deploymentList = deploymentQuerydslRepository.getSearchDeploymentList(search,offset,sublist);
         val count = deploymentQuerydslRepository.getSearchDeploymentList(search,null,null).size;
         return DeploymentListResponse(count,deploymentList)
+    }
+    fun getDeploymentStatus(namespace: String, name: String): Boolean {
+        return deploymentClient.getDeploymentStatus(namespace, name);
+    }
+    @Transactional
+    fun createDeployment(deploymentCreateRequest: DeploymentCreateRequest): String {
+        deploymentClient.createDeployment(deploymentCreateRequest)
+        val maxAttempts = 10
+        var currentAttempt = 0
+        runBlocking {
+            while (currentAttempt < maxAttempts){
+                val status = getDeploymentStatus(deploymentCreateRequest.namespace,deploymentCreateRequest.name)
+                if(status) {
+                    syncDeploymentList()
+                    break
+                }
+            }
+            delay(2000)
+            currentAttempt++
+        }
+        return deploymentCreateRequest.name
+    }
+    @Transactional
+    fun deleteDeployment(deploymentDeleteRequest: DeploymentDeleteRequest): Boolean {
+        deploymentClient.deleteDeployment(deploymentDeleteRequest)
+        val maxAttempts = 10
+        var currentAttempt = 0
+        var isDeploymentDeleted = false
+        runBlocking {
+            while (currentAttempt < maxAttempts){
+                val status = getDeploymentStatus(deploymentDeleteRequest.namespace,deploymentDeleteRequest.name)
+                if(!status){
+                    isDeploymentDeleted = true
+                    syncDeploymentList()
+                    break
+                }
+                delay(2000)
+                currentAttempt++
+            }
+        }
+        return isDeploymentDeleted;
     }
 
 
