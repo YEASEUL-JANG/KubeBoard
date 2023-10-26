@@ -1,6 +1,12 @@
 <template>
   <div>
     <table-slot header="디플로이먼트">
+        <template v-slot:create>
+            <button class="btn btn-outline-secondary btn-outline-bold" @click="openCreateModal">
+                <span v-if="createLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span v-if="!createLoading">생성하기</span>
+            </button>
+        </template>
       <base-spinner v-if="isLoading"></base-spinner>
       <table v-else>
         <thead>
@@ -12,6 +18,7 @@
           <th>생성시간</th>
           <th>상세</th>
           <th>스케일</th>
+          <th>삭제</th>
         </tr>
         </thead>
         <tbody>
@@ -31,10 +38,16 @@
           </td>
           <td>
             <button type="button" class="btn btn-outline-secondary btn-sm"
-                    @click="openmodal(index)">
+                    @click="openscalemodal(index)">
               스케일
             </button>
           </td>
+            <td>
+                <button class="btn btn-outline-secondary btn-sm" @click="deleteDeployment(item.deploymentName, item.namespace)">
+                    <span v-if="deleteLoading[item.deploymentName]" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span v-if="!deleteLoading[item.deploymentName]">삭제</span>
+                </button>
+            </td>
         </tr>
         </tbody>
       </table>
@@ -44,27 +57,35 @@
                           @getList="getdepl"/>
       </template>
     </table-slot>
+<!--      모달창-->
     <teleport to="#modal">
-      <DeploymentModal v-if="showmodal"
+      <DeploymentModal v-if="showscalemodal"
                        :currentreplica="currentreplica"
                        :currentdeployment="currentdeployment"
                        :currentnamespace="currentnamespace"
                        @changeReplica="changeReplica"
                        @close="closeModal"/>
     </teleport>
+      <teleport to="#modal">
+          <CreateModal v-if="showcreatemodal"
+                       :resource="resource"
+                       @createResource="createDeployment"
+                       @close="closeModal"/>
+      </teleport>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import {computed, onMounted, provide, ref} from "vue";
+import {computed, onMounted, provide, reactive, ref} from "vue";
 import {useRoute, useRouter} from 'vue-router';
 import LabelList from "@/components/common/LabelList.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import DeploymentModal from "@/components/deployment/DeploymentModal.vue";
+import CreateModal from "@/components/common/CreateModal.vue";
 
 export default {
-  components: { DeploymentModal, Pagination, LabelList },
+  components: {CreateModal, DeploymentModal, Pagination, LabelList },
   setup() {
     const items = ref([]);
     const router = useRouter();
@@ -72,29 +93,39 @@ export default {
     const limit = 5;
     const currentPage = ref(1);
     const numberOflist = ref(0);
-    const showmodal = ref(false);
+    const showscalemodal = ref(false);
+    const showcreatemodal = ref(false);
     const currentreplica = ref(0);
     const currentdeployment = ref("");
     const currentnamespace = ref("");
     const isLoading = ref(false);
+    const createLoading = ref(false);
+    const deleteLoading = reactive({});
     const update = ref(false);
+    const resource = "deployment";
 
     //총 페이지 수 계산
     const numberOfPages = computed(() => {
       return Math.ceil((numberOflist.value / limit));
     });
 
-    //모달열기
-    const openmodal = (index) => {
-      showmodal.value = true;
+    //스케일 모달열기
+    const openscalemodal = (index) => {
+      showscalemodal.value = true;
       currentnamespace.value = items.value[index].namespace;
       currentreplica.value = items.value[index].replicaCount;
       currentdeployment.value = items.value[index].deploymentName;
     }
+      //생성 모달열기
+      const openCreateModal = () => {
+          showcreatemodal.value = true;
+
+      }
 
     //모달닫기
     const closeModal = () => {
-      showmodal.value = false;
+      showscalemodal.value = false;
+      showcreatemodal.value = false;
       currentreplica.value = 0;
       currentdeployment.value = "";
       currentnamespace.value = "";
@@ -129,7 +160,54 @@ export default {
         console.log(err);
       }
     }
-      //데이터 불러오기
+      /**
+       * deployment 생성하기
+       */
+      const createDeployment = async (payload) => {
+          try {
+              createLoading.value = true;
+              closeModal();
+              const {data} = await axios.post('/deployment-service/create', {
+                  name: payload.name,
+                  namespace: payload.namespace
+              });
+              if (data) {
+                  createLoading.value = false;
+                  window.location.reload();
+              }else{
+                  alert("생성실패")
+                  createLoading.value = false;
+              }
+          } catch (err) {
+              console.log(err);
+          }
+      };
+      /**
+       * deployment 삭제하기
+       */
+      const deleteDeployment = async (name, namespace) => {
+          if(confirm("정말 삭제하시겠습니까?")){
+              try {
+                  deleteLoading[name] = true
+                  const {data} = await axios.post('/deployment-service/delete', {
+                      name: name,
+                      namespace: namespace
+                  });
+                  if (data) {
+                      deleteLoading[name] = false
+                      alert("삭제가 완료되었습니다.")
+                      window.location.reload();
+                  }else{
+                      deleteLoading[name] = false
+                      alert("삭제 실패")
+                  }
+              } catch (err) {
+                  console.log(err);
+              }
+          }
+
+      };
+      //데이터 업데이트
       const getUpdate = async () => {
           try {
               const result = await axios.get(
@@ -178,8 +256,27 @@ export default {
     };
 
     return {
-      items, deploymentdetail, getdepl, showmodal, currentreplica, currentdeployment,
-      currentPage, numberOfPages, changeReplica, openmodal, closeModal, currentnamespace, isLoading, setLoading
+      items,
+      deploymentdetail,
+        getdepl,
+        openscalemodal,
+        currentreplica,
+        currentdeployment,
+      currentPage,
+        numberOfPages,
+        changeReplica,
+        openCreateModal,
+        closeModal,
+        currentnamespace,
+        isLoading,
+        setLoading,
+        resource,
+        deleteLoading,
+        createLoading,
+        createDeployment,
+        deleteDeployment,
+        showscalemodal,
+        showcreatemodal,
     }
   }
 }

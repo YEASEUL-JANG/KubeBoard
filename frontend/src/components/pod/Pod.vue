@@ -6,7 +6,6 @@
               <span v-if="createLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               <span v-if="!createLoading">생성하기</span>
           </button>
-<!--          <a class="btn btn-outline-secondary btn-outline-bold" href="#" @click="openCreateModal">생성하기</a>-->
       </template>
     <base-spinner v-if="isLoading"></base-spinner>
     <table v-else>
