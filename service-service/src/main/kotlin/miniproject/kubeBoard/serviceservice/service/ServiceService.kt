@@ -1,6 +1,9 @@
 package miniproject.kubeBoard.serviceservice.service
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import miniproject.kubeBoard.serviceservice.client.ServiceClient
+import miniproject.kubeBoard.serviceservice.entity.service.ServiceCreateRequest
 import miniproject.kubeBoard.serviceservice.entity.service.ServiceListResponse
 import miniproject.kubeBoard.serviceservice.repository.service.PortQuerydslRepository
 import miniproject.kubeBoard.serviceservice.repository.service.ServiceQuerydslRepository
@@ -46,6 +49,26 @@ class ServiceService (
         val serviceList = serviceQuerydslRepository.getSearchServiceList(search,offset, sublist)
         val count = serviceQuerydslRepository.getSearchServiceList(search,null,null).size
         return ServiceListResponse(count,serviceList)
+    }
+    fun getServiceStatus(namespace: String, name: String): Boolean {
+        return serviceClient.getServiceStatus(namespace, name);
+    }
+
+    fun createService(serviceCreateRequest: ServiceCreateRequest): String {
+        val maxAttempts = 10
+        var currentAttempt = 0
+        runBlocking {
+            while (currentAttempt < maxAttempts){
+                val status = getServiceStatus(serviceCreateRequest.namespace, serviceCreateRequest.name)
+                if(status) {
+                    syncServiceList()
+                    break
+                }
+            }
+            delay(2000)
+            currentAttempt++
+        }
+        return serviceCreateRequest.name
     }
 
 

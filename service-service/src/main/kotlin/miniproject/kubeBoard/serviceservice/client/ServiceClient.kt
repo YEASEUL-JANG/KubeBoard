@@ -21,4 +21,13 @@ class ServiceClient(
     fun getServiceClientList(): MutableList<Service>? {
         return client.services().list().items
     }
+
+    fun getServiceStatus(namespace: String, serviceName: String): Boolean {
+        val service = client.services().inNamespace(namespace).withName(serviceName).get() ?: return false
+        val endpoints = client.endpoints().inNamespace(namespace).withName(serviceName).get() ?: return false
+
+        return endpoints.subsets.any { subset ->
+            subset.addresses.isNotEmpty() && subset.ports.isNotEmpty()
+        }
+    }
 }

@@ -3,11 +3,8 @@ package miniproject.kubeBoard.serviceservice.controller
 import miniproject.kubeBoard.serviceservice.entity.service.ServiceListResponse
 import miniproject.kubeBoard.serviceservice.service.ServiceService
 import io.fabric8.kubernetes.api.model.Service
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import miniproject.kubeBoard.serviceservice.entity.service.ServiceCreateRequest
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/service-service")
@@ -50,6 +47,20 @@ class ServiceController (
         val sublist=5*page
         return serviceService.getSearchServiceList(search,offset,sublist)
     }
+    /**
+     * service 생성
+     */
+    @PostMapping("/create")
+    fun createService(@RequestBody serviceCreateRequest: ServiceCreateRequest): String {
+        return serviceService.createService(serviceCreateRequest)
+    }
+    /**
+     * service 삭제
+     */
+//    @PostMapping("/delete")
+//    fun deleteService(@RequestBody deploymentDeleteRequest: DeploymentDeleteRequest): Boolean {
+//        return serviceService.deleteService(deploymentDeleteRequest)
+//    }
 
     /**
      * service 상세 데이터
