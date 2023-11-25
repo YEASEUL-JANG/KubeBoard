@@ -53,6 +53,7 @@ class DeploymentClient(
             val deploymentBuilder = DeploymentBuilder()
                 .withNewMetadata()
                 .withName(deploymentCreateRequest.name)
+                .addToLabels("app",deploymentCreateRequest.name)
                 .endMetadata()
                 .withNewSpec()
                 .withReplicas(deploymentCreateRequest.replica)

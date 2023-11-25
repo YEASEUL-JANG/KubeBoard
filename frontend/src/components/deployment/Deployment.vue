@@ -174,6 +174,9 @@ export default {
               });
               if (data) {
                   createLoading.value = false;
+                  //pod update
+                  await axios.get(
+                      `/pod-service/batch`);
                   window.location.reload();
               }else{
                   alert("생성실패")
@@ -196,6 +199,9 @@ export default {
                   });
                   if (data) {
                       deleteLoading[name] = false
+                      //pod update
+                      await axios.get(
+                          `/pod-service/batch`);
                       alert("삭제가 완료되었습니다.")
                       window.location.reload();
                   }else{
