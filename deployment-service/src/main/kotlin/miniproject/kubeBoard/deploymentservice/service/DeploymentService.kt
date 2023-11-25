@@ -67,7 +67,7 @@ class DeploymentService (
         var currentAttempt = 0
         runBlocking {
             while (currentAttempt < maxAttempts){
-                val status = getDeploymentStatus(deploymentCreateRequest.namespace,deploymentCreateRequest.name)
+                val status = getDeploymentStatus(deploymentCreateRequest.namespace, deploymentCreateRequest.name)
                 if(status) {
                     syncDeploymentList()
                     break
@@ -86,7 +86,10 @@ class DeploymentService (
         var isDeploymentDeleted = false
         runBlocking {
             while (currentAttempt < maxAttempts){
-                val status = getDeploymentStatus(deploymentDeleteRequest.namespace,deploymentDeleteRequest.name)
+                val status = getDeploymentStatus(
+                    deploymentDeleteRequest.namespace,
+                    deploymentDeleteRequest.name,
+                )
                 if(!status){
                     isDeploymentDeleted = true
                     syncDeploymentList()

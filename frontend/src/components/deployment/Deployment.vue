@@ -169,7 +169,8 @@ export default {
               closeModal();
               const {data} = await axios.post('/deployment-service/create', {
                   name: payload.name,
-                  namespace: payload.namespace
+                  namespace: payload.namespace,
+                  replica: payload.replica,
               });
               if (data) {
                   createLoading.value = false;

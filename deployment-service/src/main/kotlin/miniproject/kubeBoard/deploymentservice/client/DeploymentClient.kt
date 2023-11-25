@@ -55,7 +55,7 @@ class DeploymentClient(
                 .withName(deploymentCreateRequest.name)
                 .endMetadata()
                 .withNewSpec()
-                .withReplicas(1)
+                .withReplicas(deploymentCreateRequest.replica)
                 .withNewTemplate()
                 .withNewMetadata()
                 .addToLabels("app", "nginx")

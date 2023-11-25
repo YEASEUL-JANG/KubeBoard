@@ -15,6 +15,11 @@
                     <p style="font-size:14px">{{resource}} 명</p>
                     <input id="name" v-model="name">
                 </div>
+                <div class="col-4">
+                    <p style="font-size:14px">replica 수</p>
+                    <input type="number" id="replica"
+                           v-model="replica" min="1" >
+                </div>
             </div>
             <hr/>
             <div align="right">
@@ -32,14 +37,17 @@
         setup(props,{emit}){
             const name = ref("");
             const namespace = ref("");
+            const replica = ref(1);
             const createResource = ()=>{
-                emit('createResource', {name:name.value, namespace:namespace.value});
+                emit('createResource', {name:name.value,
+                    namespace:namespace.value,
+                replica:replica.value});
             };
             const onclose = () =>{
                 emit('close');
             }
             return{
-                createResource,onclose,name, namespace
+                createResource,onclose,name, namespace,replica
             };
         }
     }
