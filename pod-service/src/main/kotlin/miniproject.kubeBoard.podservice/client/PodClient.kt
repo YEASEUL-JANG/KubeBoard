@@ -53,4 +53,15 @@ class PodClient(
         }
         return null
     }
+
+    fun getLabels(): Map<String, Set<String>> {
+        val pods: List<Pod> = client.pods().inNamespace("default").list().items
+
+        return pods.mapNotNull { pod ->
+            pod.metadata?.labels?.entries
+        }.flatten().groupBy(
+            { it.key },
+            { it.value }
+        ).mapValues { (_, values) -> values.toSet()}
+    }
 }

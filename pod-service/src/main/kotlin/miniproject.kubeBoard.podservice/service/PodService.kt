@@ -96,4 +96,17 @@ class PodService (
         return isPodDeleted;
     }
 
+    fun getLabels(): List<String> {
+        val labelsMap: Map<String, Set<String>> = podClient.getLabels()
+        val labelsList = mutableListOf<String>()
+
+        labelsMap.forEach { (key, values) ->
+            values.forEach { value ->
+                labelsList.add("$key=$value")
+            }
+        }
+
+        return labelsList
+    }
+
 }

@@ -34,6 +34,10 @@ class PodController (
     fun deletePod(@RequestBody podDeleteRequest: PodDeleteRequest): Boolean {
         return podService.deletePod(podDeleteRequest)
     }
+    @GetMapping("/getLabels")
+    fun getLabels():List<String>{
+        return podService.getLabels()
+    }
 
     /**
      * Pod 동기화 (30초단위 update)
