@@ -4,6 +4,7 @@ import miniproject.kubeBoard.serviceservice.entity.service.ServiceListResponse
 import miniproject.kubeBoard.serviceservice.service.ServiceService
 import io.fabric8.kubernetes.api.model.Service
 import miniproject.kubeBoard.serviceservice.entity.service.ServiceCreateRequest
+import miniproject.kubeBoard.serviceservice.entity.service.ServiceDeleteRequest
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -57,10 +58,10 @@ class ServiceController (
     /**
      * service 삭제
      */
-//    @PostMapping("/delete")
-//    fun deleteService(@RequestBody deploymentDeleteRequest: DeploymentDeleteRequest): Boolean {
-//        return serviceService.deleteService(deploymentDeleteRequest)
-//    }
+    @PostMapping("/delete")
+    fun deleteService(@RequestBody serviceDeleteRequest: ServiceDeleteRequest): Boolean {
+        return serviceService.deleteService(serviceDeleteRequest)
+    }
 
     /**
      * service 상세 데이터

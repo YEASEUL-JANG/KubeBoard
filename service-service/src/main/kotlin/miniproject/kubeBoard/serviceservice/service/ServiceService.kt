@@ -4,6 +4,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import miniproject.kubeBoard.serviceservice.client.ServiceClient
 import miniproject.kubeBoard.serviceservice.entity.service.ServiceCreateRequest
+import miniproject.kubeBoard.serviceservice.entity.service.ServiceDeleteRequest
 import miniproject.kubeBoard.serviceservice.entity.service.ServiceListResponse
 import miniproject.kubeBoard.serviceservice.repository.service.PortQuerydslRepository
 import miniproject.kubeBoard.serviceservice.repository.service.ServiceQuerydslRepository
@@ -70,6 +71,29 @@ class ServiceService (
             currentAttempt++
         }
         return serviceCreateRequest.name
+    }
+    @Transactional
+    fun deleteService(serviceDeleteRequest: ServiceDeleteRequest): Boolean {
+        serviceClient.deleteService(serviceDeleteRequest)
+        val maxAttempts = 10
+        var currentAttempt = 0
+        var isDeploymentDeleted = false
+        runBlocking {
+            while (currentAttempt < maxAttempts){
+                val status = getServiceStatus(
+                    serviceDeleteRequest.namespace,
+                    serviceDeleteRequest.name,
+                )
+                if(!status){
+                    isDeploymentDeleted = true
+                    syncServiceList()
+                    break
+                }
+                delay(2000)
+                currentAttempt++
+            }
+        }
+        return isDeploymentDeleted;
     }
 
 

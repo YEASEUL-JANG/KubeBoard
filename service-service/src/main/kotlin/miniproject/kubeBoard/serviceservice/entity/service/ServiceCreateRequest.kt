@@ -7,4 +7,5 @@ data class ServiceCreateRequest (
     val targetPort: Int,
     val protocol: String,
     val label: String,
+    val type: String,
 )

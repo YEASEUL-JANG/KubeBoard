@@ -5,6 +5,7 @@ import io.fabric8.kubernetes.api.model.Service
 import io.fabric8.kubernetes.api.model.ServiceBuilder
 import io.fabric8.kubernetes.client.KubernetesClient
 import miniproject.kubeBoard.serviceservice.entity.service.ServiceCreateRequest
+import miniproject.kubeBoard.serviceservice.entity.service.ServiceDeleteRequest
 
 @org.springframework.stereotype.Service
 class ServiceClient(
@@ -38,9 +39,10 @@ class ServiceClient(
         val service = ServiceBuilder()
             .withNewMetadata()
             .withName(serviceCreateRequest.name)
+            .addToLabels(splitKeyValue(result)?.first,splitKeyValue(result)?.second)
             .endMetadata()
             .withNewSpec()
-            .withType("ClusterIP")
+            .withType(serviceCreateRequest.type)
             .addNewPort()
             .withProtocol(serviceCreateRequest.protocol)
             .withPort(serviceCreateRequest.port)
@@ -50,13 +52,17 @@ class ServiceClient(
             .endSpec()
             .build()
 
-        client.services().inNamespace("default").create(service)
+        client.services().inNamespace(serviceCreateRequest.namespace).create(service)
     }
     fun splitKeyValue(input:String):Pair<String,String>?{
-        val parts = input.split(":")
+        val parts = input.split("=")
         if(parts.size == 2){
             return Pair(parts[0],parts[1])
         }
         return null
+    }
+
+    fun deleteService(serviceDeleteRequest: ServiceDeleteRequest) {
+        client.services().inNamespace(serviceDeleteRequest.namespace).withName(serviceDeleteRequest.name).delete()
     }
 }
