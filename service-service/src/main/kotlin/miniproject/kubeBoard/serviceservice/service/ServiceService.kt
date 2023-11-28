@@ -53,8 +53,9 @@ class ServiceService (
     fun getServiceStatus(namespace: String, name: String): Boolean {
         return serviceClient.getServiceStatus(namespace, name);
     }
-
+    @Transactional
     fun createService(serviceCreateRequest: ServiceCreateRequest): String {
+        serviceClient.createService(serviceCreateRequest)
         val maxAttempts = 10
         var currentAttempt = 0
         runBlocking {

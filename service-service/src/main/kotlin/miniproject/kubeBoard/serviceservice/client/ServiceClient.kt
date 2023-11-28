@@ -2,7 +2,9 @@ package miniproject.kubeBoard.serviceservice.client
 
 import miniproject.kubeBoard.serviceservice.entity.service.ServiceData
 import io.fabric8.kubernetes.api.model.Service
+import io.fabric8.kubernetes.api.model.ServiceBuilder
 import io.fabric8.kubernetes.client.KubernetesClient
+import miniproject.kubeBoard.serviceservice.entity.service.ServiceCreateRequest
 
 @org.springframework.stereotype.Service
 class ServiceClient(
@@ -29,5 +31,32 @@ class ServiceClient(
         return endpoints.subsets.any { subset ->
             subset.addresses.isNotEmpty() && subset.ports.isNotEmpty()
         }
+    }
+
+    fun createService(serviceCreateRequest: ServiceCreateRequest) {
+        val result = serviceCreateRequest.label
+        val service = ServiceBuilder()
+            .withNewMetadata()
+            .withName(serviceCreateRequest.name)
+            .endMetadata()
+            .withNewSpec()
+            .withType("ClusterIP")
+            .addNewPort()
+            .withProtocol(serviceCreateRequest.protocol)
+            .withPort(serviceCreateRequest.port)
+            .withNewTargetPort(serviceCreateRequest.targetPort)
+            .endPort()
+            .addToSelector(splitKeyValue(result)?.first,splitKeyValue(result)?.second)
+            .endSpec()
+            .build()
+
+        client.services().inNamespace("default").create(service)
+    }
+    fun splitKeyValue(input:String):Pair<String,String>?{
+        val parts = input.split(":")
+        if(parts.size == 2){
+            return Pair(parts[0],parts[1])
+        }
+        return null
     }
 }

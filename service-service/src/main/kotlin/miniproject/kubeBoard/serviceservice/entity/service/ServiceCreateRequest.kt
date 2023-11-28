@@ -5,5 +5,6 @@ data class ServiceCreateRequest (
     val namespace: String,
     val port: Int,
     val targetPort: Int,
-    val protocol: String
+    val protocol: String,
+    val label: String,
 )
