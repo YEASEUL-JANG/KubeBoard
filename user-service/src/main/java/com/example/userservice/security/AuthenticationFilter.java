@@ -2,12 +2,15 @@ package com.example.userservice.security;
 
 import com.example.userservice.dto.RequestLogin;
 import com.example.userservice.dto.UserDto;
+import com.example.userservice.dto.UserLogRequest;
+import com.example.userservice.kafka.KafkaProducer;
 import com.example.userservice.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,11 +30,16 @@ import java.util.Date;
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private UserService userService;
     private Environment environment;
+    private KafkaProducer kafkaProducer;
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, Environment environment) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager,
+                                UserService userService,
+                                Environment environment,
+                                KafkaProducer kafkaProducer) {
         super(authenticationManager);
         this.userService = userService;
         this.environment = environment;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @Override
@@ -71,5 +79,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
            response.addHeader("Access-Control-Expose-Headers", "token, userId");
            response.addHeader("token", token);
            response.addHeader("userId", userDetails.getUserId());
+
+        //Kafka 로그인 접속 로그
+        UserLogRequest userLogRequest = UserLogRequest.builder()
+                .requestData("log in 접속")
+                .userId(userDetails.getUserId())
+                .requestMs("user-service")
+                .requestSource("user")
+                .build();
+        kafkaProducer.send("log-service",userLogRequest);
     }
 }

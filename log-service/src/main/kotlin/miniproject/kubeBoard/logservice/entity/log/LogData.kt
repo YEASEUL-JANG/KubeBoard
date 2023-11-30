@@ -14,7 +14,7 @@ class LogData(
     val requestData: String,
     @Column(nullable = false)
     val requestSource: String,
-    @Column(nullable = false)
+    @Column(nullable = true)
     val requestNum: Int,
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     val requestedTime: Date? = null,

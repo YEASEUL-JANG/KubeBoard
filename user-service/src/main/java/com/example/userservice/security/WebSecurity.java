@@ -1,10 +1,13 @@
 package com.example.userservice.security;
 
+import com.example.userservice.dto.UserLogRequest;
+import com.example.userservice.kafka.KafkaProducer;
 import com.example.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,12 +27,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private UserService userService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private Environment env;
+    private KafkaProducer kafkaProducer;
 
     @Autowired
-    public WebSecurity(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, Environment env) {
+    public WebSecurity(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, Environment env, KafkaProducer kafkaProducer) {
         this.userService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.env = env;
+        this.kafkaProducer = kafkaProducer;
     }
     /**
      * 인증과 관련된 configure (인증 -> 권한부여)
@@ -64,7 +69,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     //사용자 요청에 대해 AuthenticationFilter를 거치도록 수정함.
     private AuthenticationFilter getAuthenticationFilter() throws  Exception{
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(),userService,env);
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(),userService,env,kafkaProducer);
         return authenticationFilter;
     }
 
