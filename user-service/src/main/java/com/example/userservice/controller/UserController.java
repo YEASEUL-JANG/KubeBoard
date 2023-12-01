@@ -3,6 +3,7 @@ package com.example.userservice.controller;
 import com.example.userservice.dto.RequestUser;
 import com.example.userservice.dto.ResponseUser;
 import com.example.userservice.entity.UserEntity;
+import com.example.userservice.error.ErrorResponse;
 import com.example.userservice.service.UserService;
 import com.example.userservice.dto.UserDto;
 import io.micrometer.core.annotation.Timed;
@@ -11,11 +12,13 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 @RestController
@@ -39,12 +42,19 @@ public class UserController {
      */
 
     @PostMapping("/users")
-    public ResponseEntity<ResponseUser> createUser(@RequestBody RequestUser user){
+    public ResponseEntity<?> createUser(@RequestBody RequestUser user){
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
         UserDto userDto = mapper.map(user,UserDto.class);
-        userService.createUser(userDto);
+        try{
+            userService.createUser(userDto);
+        }catch (DataAccessException e){
+            ErrorResponse errorResponse = ErrorResponse.builder()
+                    .errorMessage("이미 사용중인 아이디입니다. 다른 아이디를 사용해주세요.")
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
 
         ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
@@ -79,8 +89,8 @@ public class UserController {
      */
 
     @PostMapping("/idCheck")
-    public ResponseEntity<Boolean> idCheck(@RequestBody String userId){
-        int userCount = userService.duplicateUser(userId);
+    public ResponseEntity<Boolean> idCheck(@RequestBody RequestUser user){
+        int userCount = userService.duplicateUser(user.getUserId());
         boolean isValid = false;
         if(userCount == 0){
             isValid = true;

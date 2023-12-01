@@ -78,10 +78,6 @@ export default {
                 alert("이메일을 입력해주세요.");
                 return;
             }
-            if (!isValid.value) {
-                alert("이미 사용중인 아이디입니다.");
-                return;
-            }
 
             axios.post('user-service/users', {
                 "userId": userId.value,
@@ -91,6 +87,15 @@ export default {
                 isFinish.value = true;
                 alert("회원가입이 완료되었습니다.");
                 router.replace('/login');
+            }).catch(error => {
+                if (error.response && error.response.status === 400) {
+                    console.error("Error: ", error.response.data.errorMessage);
+                    alert(error.response.data.errorMessage);
+                } else {
+                    // 기타 다른 종류의 에러 처리
+                    console.error(error.message);
+                }
+                return error.message;
             });
         };
 
