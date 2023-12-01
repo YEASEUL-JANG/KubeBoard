@@ -83,6 +83,7 @@ import LabelList from "@/components/common/LabelList.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import DeploymentModal from "@/components/deployment/DeploymentModal.vue";
 import CreateModal from "@/components/common/CreateModal.vue";
+import store from "@/store/store";
 
 export default {
   components: {CreateModal, DeploymentModal, Pagination, LabelList },
@@ -139,11 +140,15 @@ export default {
 
     //레플리카 수정
     const changeReplica = async (setreplica) => {
-      const name = currentdeployment.value;
-      const namespace = currentnamespace.value;
       try {
-        const { data } = await axios.get(
-            `/deployment-service/scale?name=${ name }&namespace=${ namespace }&scale=${ setreplica }`);
+        const { data } = await axios.post(
+            `/deployment-service/scale`,
+             {
+                name: currentdeployment.value,
+                namespace: currentnamespace.value,
+                scale: setreplica,
+                userId: store.getters.getId
+            });
 
         if (data === 1) {
           closeModal();
@@ -171,6 +176,7 @@ export default {
                   name: payload.name,
                   namespace: payload.namespace,
                   replica: payload.replica,
+                  userId: store.getters.getId
               });
               if (data) {
                   createLoading.value = false;
@@ -195,7 +201,8 @@ export default {
                   deleteLoading[name] = true
                   const {data} = await axios.post('/deployment-service/delete', {
                       name: name,
-                      namespace: namespace
+                      namespace: namespace,
+                      userId: store.getters.getId
                   });
                   if (data) {
                       deleteLoading[name] = false

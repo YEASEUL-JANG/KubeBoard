@@ -5,6 +5,7 @@ import miniproject.kubeBoard.deploymentservice.service.DeploymentService
 import io.fabric8.kubernetes.api.model.apps.Deployment
 import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentCreateRequest
 import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentDeleteRequest
+import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentScaleRequest
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -74,14 +75,21 @@ class DeploymentController (
         return deploymentService.getDeployment(name)
 
     }
-    @GetMapping("/scale")
+    @PostMapping("/scale")
     fun getDeploymentScale(
-            @RequestParam("name") name: String,
-            @RequestParam("namespace") namespace: String,
-            @RequestParam("scale") scale: Int,
+            @RequestBody deploymentScaleRequest: DeploymentScaleRequest,
     ):Int{
-        return if(!name.equals("")&& !namespace.equals("") && scale!=0){
-            deploymentService.changeReplica(name,namespace,scale)
+        return if(!deploymentScaleRequest.name.equals("") &&
+            !deploymentScaleRequest.namespace.equals("") &&
+            deploymentScaleRequest.scale!=0){
+            deploymentService.changeReplica(deploymentScaleRequest)
+            deploymentService.savelogData(
+                deploymentScaleRequest.name,
+                deploymentScaleRequest.scale,
+                "replica",
+                "replica scale",
+                deploymentScaleRequest.userId
+            )
             1;
         }else 0;
     }

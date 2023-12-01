@@ -1,8 +1,8 @@
 package miniproject.kubeBoard.podservice.entity.pod.req
 
-data class DeploymentCreateRequest(
+data class DeploymentScaleRequest(
         val namespace: String,
         val name: String,
-        val replica: Int,
+        val scale: Int,
         val userId: String
 )

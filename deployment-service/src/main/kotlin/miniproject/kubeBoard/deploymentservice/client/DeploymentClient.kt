@@ -7,6 +7,7 @@ import io.fabric8.kubernetes.client.KubernetesClient
 import lombok.extern.slf4j.Slf4j
 import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentCreateRequest
 import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentDeleteRequest
+import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentScaleRequest
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -29,9 +30,11 @@ class DeploymentClient(
         return client.apps().deployments()?.list()?.items
     }
 
-    fun changeReplica(name: String, namespace: String, scale: Int) {
+    fun changeReplica(deploymentScaleRequest : DeploymentScaleRequest) {
         try{
-            client.apps().deployments().inNamespace(namespace).withName(name).scale(scale)
+            client.apps().deployments().inNamespace(deploymentScaleRequest.namespace)
+                .withName(deploymentScaleRequest.name)
+                .scale(deploymentScaleRequest.scale)
         }catch (e:Exception){
             e.printStackTrace()
         }

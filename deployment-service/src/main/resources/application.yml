@@ -46,3 +46,5 @@ management:
         include: refresh,health,beans,httptrace,busrefresh,info,prometheus,metrics
 
 
+kafka:
+  server: 127.0.0.1:9092

@@ -7,9 +7,12 @@ import miniproject.kubeBoard.deploymentservice.repository.deployment.DeploymentR
 import io.fabric8.kubernetes.api.model.apps.Deployment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import miniproject.kubeBoard.deploymentservice.entity.deployment.req.UserLogRequest
+import miniproject.kubeBoard.deploymentservice.kafka.KafkaProducer
 import miniproject.kubeBoard.deploymentservice.repository.deployment.ConditionQuerydslRepository
 import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentCreateRequest
 import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentDeleteRequest
+import miniproject.kubeBoard.podservice.entity.pod.req.DeploymentScaleRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
@@ -21,6 +24,7 @@ class DeploymentService (
         private val deploymentQuerydslRepository: DeploymentQuerydslRepository,
         private val conditionQuerydslRepository: ConditionQuerydslRepository,
         private val entityManager: EntityManager,
+    private val kafkaProducer: KafkaProducer
 ){
     @Transactional
     fun syncDeploymentList(){
@@ -48,8 +52,8 @@ class DeploymentService (
         return deploymentClient.getDeploymentClientList()
     }
 
-    fun changeReplica(name: String, namespace: String, scale: Int) {
-        deploymentClient.changeReplica(name, namespace, scale);
+    fun changeReplica(deploymentScaleRequest : DeploymentScaleRequest) {
+        deploymentClient.changeReplica(deploymentScaleRequest);
     }
 
     fun getSearchDeployment(search: String?, offset: Int, sublist: Int): DeploymentListResponse {
@@ -76,6 +80,14 @@ class DeploymentService (
             delay(2000)
             currentAttempt++
         }
+        //로그 저장
+        savelogData(
+            deploymentCreateRequest.name,
+            1,
+            "deployment",
+            "create",
+            deploymentCreateRequest.userId
+        )
         return deploymentCreateRequest.name
     }
     @Transactional
@@ -99,7 +111,27 @@ class DeploymentService (
                 currentAttempt++
             }
         }
+        //로그 저장
+        savelogData(
+            deploymentDeleteRequest.name,
+            1,
+            "deployment",
+            "delete",
+            deploymentDeleteRequest.userId
+        )
         return isDeploymentDeleted;
+    }
+
+    fun savelogData(name: String, scale: Int, requestData: String,
+                    requestSource: String, userId: String) {
+        val userLogRequest = UserLogRequest(
+            userId = userId,
+            requestMs = "deployment-service",
+            requestData = requestData,
+            requestSource = requestSource,
+            requestNum = scale
+        )
+        kafkaProducer.send("log-service",userLogRequest)
     }
 
 
