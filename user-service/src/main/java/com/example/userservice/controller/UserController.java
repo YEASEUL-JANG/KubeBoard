@@ -87,5 +87,9 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(isValid);
     }
+    @PostMapping("/log-out")
+    public void logout(@RequestBody ResponseUser user){
+        userService.logout(user.getUserId());
+    }
 
 }

@@ -1,12 +1,10 @@
 package com.example.userservice.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@ToString
 public class UserLogRequest {
     private String userId;
     private String requestData;

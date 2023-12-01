@@ -53,7 +53,7 @@ spring:
         - id: user-service-idCheck
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user-service/idCheck #로그아웃
+            - Path=/user-service/idCheck #아이디체크
             - Method=POST,OPTIONS
           filters:
             - name: LoggingFilter
@@ -76,7 +76,7 @@ spring:
            uri: lb://USER-SERVICE
            predicates:
              - Path=/user-service/** #그 외 나머지 요청 (요청 헤더안에 인증토큰있는지 검증)
-             - Method=GET
+             - Method=GET,POST,OPTIONS
            filters:
              - name: LoggingFilter
                args:

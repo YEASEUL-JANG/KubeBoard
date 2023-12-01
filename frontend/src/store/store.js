@@ -88,9 +88,6 @@ const store = createStore({
                     userId: null,
                     token: null
                 });
-
-                return axios.post('/user-service/logout', {}
-                )
             }
             ,
 

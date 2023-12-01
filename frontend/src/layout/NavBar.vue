@@ -45,6 +45,7 @@
 import {computed, onMounted, ref} from 'vue';
 import {useRoute, useRouter} from "vue-router";
 import store from "@/store/store";
+import axios from "axios";
 
 export default {
     name: 'NavBar',
@@ -70,8 +71,17 @@ export default {
                 console.log(searchInput.value);
             }
         })
-        const logout = () => {
-            store.dispatch('logout');
+        const logout =async () => {
+            const userId = store.getters.getId;
+            await axios.post('/user-service/log-out',
+                {
+                    "userId": userId,
+                })
+                .catch((e)=> {
+                    console.error(e);
+                })
+            await alert("로그아웃 되었습니다.")
+            await store.dispatch('logout');
             location.href = '/login';
         };
 

@@ -3,7 +3,9 @@ package com.example.userservice.service;
 
 import com.example.userservice.client.LogServiceClient;
 import com.example.userservice.dto.ResponseUserLog;
+import com.example.userservice.dto.UserLogRequest;
 import com.example.userservice.entity.UserEntity;
+import com.example.userservice.kafka.KafkaProducer;
 import com.example.userservice.repository.UserRepository;
 import com.example.userservice.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private Environment env;
     private CircuitBreakerFactory circuitBreakerFactory;
     private LogServiceClient logServiceClient;
+    private KafkaProducer kafkaProducer;
     @Autowired
     //생성자 주입으로 주입된 객체들은 빈으로 등록이 되어있어야 한다.
     //BCryptPasswordEncoder 은 빈으로 개발자가 등록한적이 없기때문에 그냥 주입하면 오류 -> 가장먼저 실행되는 스프링 앱의 기동클래스에 빈으로 주입시킨다.
@@ -41,13 +44,15 @@ public class UserServiceImpl implements UserService {
                            Environment env,
                            RestTemplate restTemplate,
                            LogServiceClient logServiceClient,
-                           CircuitBreakerFactory circuitBreakerFactory) {
+                           CircuitBreakerFactory circuitBreakerFactory,
+                           KafkaProducer kafkaProducer) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.env = env;
         this.restTemplate = restTemplate;
         this.logServiceClient = logServiceClient;
         this.circuitBreakerFactory = circuitBreakerFactory;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @Override
@@ -105,6 +110,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public int duplicateUser(String userId) {
        return (int) userRepository.countByUserId(userId);
+    }
+
+    @Override
+    public void logout(String userId) {
+        //Kafka 로그아웃 로그
+        UserLogRequest userLogRequest = UserLogRequest.builder()
+                .requestData("logout 로그아웃")
+                .userId(userId)
+                .requestMs("user-service")
+                .requestSource("login")
+                .build();
+        kafkaProducer.send("log-service",userLogRequest);
     }
 
     @Override

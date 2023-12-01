@@ -12,4 +12,6 @@ public interface UserService extends UserDetailsService {
     Iterable<UserEntity> getUserByAll();
     UserDto getUserDetailsByUserId(String userId);
     int duplicateUser(String userId);
+
+    void logout(String userId);
 }

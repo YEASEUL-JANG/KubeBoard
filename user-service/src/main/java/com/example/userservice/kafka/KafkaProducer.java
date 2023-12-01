@@ -25,7 +25,7 @@ public class KafkaProducer {
             throw new RuntimeException(e);
         }
         kafkaTemplate.send(kafkaTopic, jsonInString);
-        log.info("Kafka Producer send data from the user-service: "+ userLogRequest);
+        log.info("Kafka Producer send data from the user-service: "+ userLogRequest.toString());
         return userLogRequest;
     }
 
