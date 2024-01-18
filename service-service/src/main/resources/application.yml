@@ -10,12 +10,12 @@ spring:
     username: guest
     password: guest
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        format_sql: true
   zipkin:
     base-url: http://127.0.0.1:9411
     enabled: true
