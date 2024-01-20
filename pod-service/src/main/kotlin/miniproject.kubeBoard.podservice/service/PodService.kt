@@ -9,6 +9,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import miniproject.kubeBoard.podservice.entity.pod.req.PodCreateRequest
 import miniproject.kubeBoard.podservice.entity.pod.req.PodDeleteRequest
+import miniproject.kubeBoard.podservice.entity.pod.req.UserLogRequest
+import miniproject.kubeBoard.podservice.kafka.KafkaProducer
 import miniproject.kubeBoard.podservice.repository.pod.ContainerQuerydslRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -21,6 +23,7 @@ class PodService (
     private val podQuerydslRepository: PodQuerydslRepository,
     private val containerQuerydslRepository: ContainerQuerydslRepository,
     private val entityManager: EntityManager,
+    private val kafkaProducer: KafkaProducer
 ){
     @Transactional
     fun syncPodList(){
@@ -73,6 +76,14 @@ class PodService (
             delay(2000)
             currentAttempt++
              }
+        //로그 저장
+        savelogData(
+                podCreateRequest.name,
+                1,
+                "pod",
+                "create",
+                podCreateRequest.userId
+        )
         return podCreateRequest.name
     }
     @Transactional
@@ -93,6 +104,14 @@ class PodService (
                 currentAttempt++
             }
         }
+        //로그 저장
+        savelogData(
+                podDeleteRequest.name,
+                1,
+                "deployment",
+                "delete",
+                podDeleteRequest.userId
+        )
         return isPodDeleted;
     }
 
@@ -107,6 +126,17 @@ class PodService (
         }
 
         return labelsList
+    }
+    fun savelogData(name: String, scale: Int, requestData: String,
+                    requestSource: String, userId: String) {
+        val userLogRequest = UserLogRequest(
+                userId = userId,
+                requestMs = "deployment-service",
+                requestData = requestData,
+                requestSource = requestSource,
+                requestNum = scale
+        )
+        kafkaProducer.send("log-service",userLogRequest)
     }
 
 }

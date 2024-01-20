@@ -73,6 +73,7 @@ import {useRoute, useRouter} from 'vue-router';
 import LabelList from '../common/LabelList.vue';
 import Pagination from "@/components/common/Pagination.vue";
 import CreateModal from "@/components/common/CreateModal.vue";
+import store from "@/store/store";
 export default {
   components: {
       CreateModal,
@@ -139,7 +140,8 @@ export default {
                 //console.log(typeof payload.name, typeof payload.namespace)
                 const {data} = await axios.post('/pod-service/create', {
                     name: payload.name,
-                    namespace: payload.namespace
+                    namespace: payload.namespace,
+                    userId: store.getters.getId
                 });
                 if (data) {
                     createLoading.value = false;
@@ -161,7 +163,8 @@ export default {
                     deleteLoading[name] = true
                     const {data} = await axios.post('/pod-service/delete', {
                         name: name,
-                        namespace: namespace
+                        namespace: namespace,
+                        userId: store.getters.getId
                     });
                     if (data) {
                         deleteLoading[name] = false
