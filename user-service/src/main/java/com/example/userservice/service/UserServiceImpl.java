@@ -73,16 +73,6 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("User not found");
         }
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
-        //* Using a resttemplate *//
-        //order_service.url = http://127.0.0.1:8000/order-service/%s/orders
-//        String orderUrl = String.format(env.getProperty("order_service.url"),userId);
-//        ResponseEntity<List<ResponseOrder>> orderListResponse =
-//                restTemplate.exchange(orderUrl, HttpMethod.GET, null, new ParameterizedTypeReference<List<ResponseOrder>>() {
-//                });
-//        List<ResponseOrder> ordersList = orderListResponse.getBody();
-
-        //* Using a feignclient *//
-//        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
 
         /* CircuitBreaker*/
         log.info("Before call log microservice");

@@ -11,6 +11,7 @@ import SearchPage from "@/page/SearchPage.vue";
 import LoginView from "@/components/user/LoginView.vue";
 import JoinView from "@/components/user/JoinView.vue";
 import store from "@/store/store";
+import UserInfo from "@/components/user/UserInfo.vue";
 
 const routes = [
     { path: "/", name: 'mainPage', component: MainPage, meta: {auth: true} },
@@ -25,6 +26,7 @@ const routes = [
     { path: '/login', name: 'Login', component: LoginView, meta: {unauth: true} },
     { path: '/join', name: 'Join', component: JoinView, meta: {unauth: true} },
     { path: '/logout', name: 'Logout', component: LoginView, meta: {unauth: true} },
+    { path: '/myInfo/:userId', name: 'UserInfo', props: true, component: UserInfo, meta: {auth: true} },
 
     { path: '/:anything(.*)*', component: NotFound },
 ];

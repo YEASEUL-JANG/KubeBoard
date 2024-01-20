@@ -30,6 +30,7 @@
               <div>
                   <ul class="dropdown-menu" style="z-index: 1;">
                       <li><a class="dropdown-item" style="cursor:pointer" @click="logout">로그아웃</a></li>
+                      <li><a class="dropdown-item" style="cursor:pointer" @click="myinfo">내 정보</a></li>
                   </ul>
               </div>
           </li>
@@ -85,6 +86,14 @@ export default {
             location.href = '/login';
         };
 
+        /**
+         * UserInfo 조회
+         */
+        const myInfo = () => {
+            const userId = store.getters.getId;
+            router.push('/myInfo/'+userId );
+        };
+
         // computed 속성
         const idCheck = computed(() => store.getters.getId);
 
@@ -92,7 +101,8 @@ export default {
             searchInput, // 템플릿에서 사용하기 위해 반환합니다.
             search,      // 동일
             logout,      // 동일
-            idCheck      // 동일
+            idCheck,
+            myInfo
         };
     }
 }
