@@ -3,9 +3,11 @@ package miniproject.kubeBoard.serviceservice.service
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import miniproject.kubeBoard.serviceservice.client.ServiceClient
-import miniproject.kubeBoard.serviceservice.entity.service.ServiceCreateRequest
-import miniproject.kubeBoard.serviceservice.entity.service.ServiceDeleteRequest
+import miniproject.kubeBoard.serviceservice.entity.service.req.ServiceCreateRequest
+import miniproject.kubeBoard.serviceservice.entity.service.req.ServiceDeleteRequest
 import miniproject.kubeBoard.serviceservice.entity.service.ServiceListResponse
+import miniproject.kubeBoard.serviceservice.entity.service.req.UserLogRequest
+import miniproject.kubeBoard.serviceservice.kafka.KafkaProducer
 import miniproject.kubeBoard.serviceservice.repository.service.PortQuerydslRepository
 import miniproject.kubeBoard.serviceservice.repository.service.ServiceQuerydslRepository
 import miniproject.kubeBoard.serviceservice.repository.service.ServiceRepository
@@ -20,6 +22,8 @@ class ServiceService (
         private val serviceQuerydslRepository: ServiceQuerydslRepository,
         private val portQuerydslRepository: PortQuerydslRepository,
         private val entityManager: EntityManager,
+        private val kafkaProducer: KafkaProducer
+
 ){
     @Transactional
     fun syncServiceList(){
@@ -70,6 +74,14 @@ class ServiceService (
             delay(2000)
             currentAttempt++
         }
+        //로그 저장
+        savelogData(
+                serviceCreateRequest.name,
+                1,
+                "service",
+                "create",
+                serviceCreateRequest.userId
+        )
         return serviceCreateRequest.name
     }
     @Transactional
@@ -93,7 +105,26 @@ class ServiceService (
                 currentAttempt++
             }
         }
+        //로그 저장
+        savelogData(
+                serviceDeleteRequest.name,
+                1,
+                "service",
+                "delete",
+                serviceDeleteRequest.userId
+        )
         return isDeploymentDeleted;
+    }
+    fun savelogData(name: String, scale: Int, requestData: String,
+                    requestSource: String, userId: String) {
+        val userLogRequest = UserLogRequest(
+                userId = userId,
+                requestMs = "deployment-service",
+                requestData = requestData,
+                requestSource = requestSource,
+                requestNum = scale
+        )
+        kafkaProducer.send("log-service",userLogRequest)
     }
 
 

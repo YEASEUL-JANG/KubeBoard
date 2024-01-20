@@ -4,8 +4,8 @@ import miniproject.kubeBoard.serviceservice.entity.service.ServiceData
 import io.fabric8.kubernetes.api.model.Service
 import io.fabric8.kubernetes.api.model.ServiceBuilder
 import io.fabric8.kubernetes.client.KubernetesClient
-import miniproject.kubeBoard.serviceservice.entity.service.ServiceCreateRequest
-import miniproject.kubeBoard.serviceservice.entity.service.ServiceDeleteRequest
+import miniproject.kubeBoard.serviceservice.entity.service.req.ServiceCreateRequest
+import miniproject.kubeBoard.serviceservice.entity.service.req.ServiceDeleteRequest
 
 @org.springframework.stereotype.Service
 class ServiceClient(

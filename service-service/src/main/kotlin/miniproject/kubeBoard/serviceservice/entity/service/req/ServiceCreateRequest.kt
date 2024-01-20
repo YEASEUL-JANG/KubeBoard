@@ -1,4 +1,4 @@
-package miniproject.kubeBoard.serviceservice.entity.service
+package miniproject.kubeBoard.serviceservice.entity.service.req
 
 data class ServiceCreateRequest (
     val name: String,
@@ -8,4 +8,5 @@ data class ServiceCreateRequest (
     val protocol: String,
     val label: String,
     val type: String,
+    val userId: String
 )

@@ -64,6 +64,7 @@ import Pagination from "@/components/common/Pagination.vue";
 import router from "@/router";
 import {useRoute} from "vue-router";
 import CreateModal from "@/components/common/CreateModal.vue";
+import store from "@/store/store";
 
 
 export default {
@@ -143,7 +144,8 @@ export default {
                     targetport: payload.targetport,
                     label: payload.label,
                     protocol: payload.protocol,
-                    type: payload.type
+                    type: payload.type,
+                    userId: store.getters.getId
                 });
                 if (data) {
                     createLoading.value = false;
@@ -165,7 +167,8 @@ export default {
                     deleteLoading[name] = true
                     const {data} = await axios.post('/service-service/delete', {
                         name: name,
-                        namespace: namespace
+                        namespace: namespace,
+                        userId: store.getters.getId
                     });
                     if (data) {
                         deleteLoading[name] = false

@@ -3,8 +3,8 @@ package miniproject.kubeBoard.serviceservice.controller
 import miniproject.kubeBoard.serviceservice.entity.service.ServiceListResponse
 import miniproject.kubeBoard.serviceservice.service.ServiceService
 import io.fabric8.kubernetes.api.model.Service
-import miniproject.kubeBoard.serviceservice.entity.service.ServiceCreateRequest
-import miniproject.kubeBoard.serviceservice.entity.service.ServiceDeleteRequest
+import miniproject.kubeBoard.serviceservice.entity.service.req.ServiceCreateRequest
+import miniproject.kubeBoard.serviceservice.entity.service.req.ServiceDeleteRequest
 import org.springframework.web.bind.annotation.*
 
 @RestController
