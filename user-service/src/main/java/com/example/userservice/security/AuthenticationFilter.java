@@ -85,7 +85,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .requestData("log in 접속")
                 .userId(userDetails.getUserId())
                 .requestMs("user-service")
-                .requestSource("logout")
+                .requestSource("login")
                 .build();
         kafkaProducer.send("log-service",userLogRequest);
     }

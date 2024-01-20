@@ -2,6 +2,7 @@ package com.example.userservice.controller;
 
 import com.example.userservice.dto.RequestUser;
 import com.example.userservice.dto.ResponseUser;
+import com.example.userservice.dto.UserLogRequest;
 import com.example.userservice.entity.UserEntity;
 import com.example.userservice.error.ErrorResponse;
 import com.example.userservice.service.UserService;
@@ -57,6 +58,13 @@ public class UserController {
         }
 
         ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
+        //Kafka 로그인 접속 로그
+        UserLogRequest userLogRequest = UserLogRequest.builder()
+                .requestData("최초 회원가입")
+                .userId(user.getUserId())
+                .requestMs("user-service")
+                .requestSource("join")
+                .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
     /**

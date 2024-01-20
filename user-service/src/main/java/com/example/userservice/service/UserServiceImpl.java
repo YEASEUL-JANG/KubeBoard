@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
                 .requestData("logout 로그아웃")
                 .userId(userId)
                 .requestMs("user-service")
-                .requestSource("login")
+                .requestSource("logout")
                 .build();
         kafkaProducer.send("log-service",userLogRequest);
     }
