@@ -11,7 +11,8 @@ public class ResponseUser {
     private String email;
     private String name;
     private String userId;
+    private String createdAt;
 
-    private List<ResponseUserLog> userLogs;
+    private List<ResponseUserLog> logs;
 
 }

@@ -62,11 +62,9 @@ export default {
     components: {
         BaseSpinner,
     },
-    props: ['userId'],
-
     setup() {
         const route = useRoute();
-        const userId = route.params.name;
+        const userId = route.params.userId;
         const userLogList = ref([])
         const userInfo = ref({})
         const isLoading = ref(false)

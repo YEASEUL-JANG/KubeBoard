@@ -10,5 +10,5 @@ import java.util.Date;
         private String requestMs;
         private String requestSource;
         private Integer requestNum;
-        private Date requestAt;
+        private Date requestedTime;
 }

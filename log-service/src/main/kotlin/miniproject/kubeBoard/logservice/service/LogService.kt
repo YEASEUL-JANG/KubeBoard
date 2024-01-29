@@ -1,8 +1,10 @@
 package miniproject.kubeBoard.logservice.service
 
+import miniproject.kubeBoard.logservice.dto.ResponseUserLog
 import miniproject.kubeBoard.logservice.entity.log.LogData
 import miniproject.kubeBoard.logservice.entity.log.req.UserLogRequest
 import miniproject.kubeBoard.logservice.entity.log.res.UserLogResponse
+import miniproject.kubeBoard.logservice.repository.log.LogQuerydslRepository
 import miniproject.kubeBoard.logservice.repository.log.LogRepository
 import org.springframework.stereotype.Service
 import javax.persistence.EntityManager
@@ -10,13 +12,13 @@ import javax.persistence.EntityManager
 @Service
 class LogService (
     private val logRepository: LogRepository,
+    private val logQuerydslRepository: LogQuerydslRepository,
     private val entityManager: EntityManager,
 ){
 
-    fun getUserLog(userId: String): UserLogResponse {
-        val logDataList = logRepository.findAllByUserId(userId)
-
-        return UserLogResponse(logDataList.size, logDataList)
+    fun getUserLog(userId: String, offset: Int, sublist: Int): List<ResponseUserLog> {
+        val result : List<LogData> = logQuerydslRepository.findAllByUserId(userId,offset,sublist)
+        return  result.map { logData -> ResponseUserLog.of(logData) }
     }
 
     fun saveUserLog(userLogRequest: UserLogRequest): UserLogResponse {

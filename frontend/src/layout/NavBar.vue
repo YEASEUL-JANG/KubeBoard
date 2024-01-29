@@ -30,7 +30,7 @@
               <div>
                   <ul class="dropdown-menu" style="z-index: 1;">
                       <li><a class="dropdown-item" style="cursor:pointer" @click="logout">로그아웃</a></li>
-                      <li><a class="dropdown-item" style="cursor:pointer" @click="myinfo">내 정보</a></li>
+                      <li><a class="dropdown-item" style="cursor:pointer" @click="myInfo">내 정보</a></li>
                   </ul>
               </div>
           </li>

@@ -1,5 +1,7 @@
 package miniproject.kubeBoard.logservice.controller
 
+import miniproject.kubeBoard.logservice.dto.ResponseUserLog
+import miniproject.kubeBoard.logservice.entity.log.LogData
 import miniproject.kubeBoard.logservice.entity.log.req.UserLogRequest
 import miniproject.kubeBoard.logservice.entity.log.res.UserLogResponse
 import miniproject.kubeBoard.logservice.service.LogService
@@ -24,9 +26,12 @@ class LogController (
      * User Log 상세 데이터
      */
     @GetMapping("/list/{userId}")
-    fun getLog(
+    fun getLogList(
             @PathVariable("userId") userId:String,
-    ): UserLogResponse {
-        return logService.getUserLog(userId);
+            @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
+    ): List<ResponseUserLog> {
+        val offset= (page-1)*5
+        val sublist=5*page
+        return logService.getUserLog(userId,offset,sublist);
     }
 }

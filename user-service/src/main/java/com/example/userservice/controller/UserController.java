@@ -85,7 +85,8 @@ public class UserController {
      * @return
      */
     @GetMapping(value = "/users/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ResponseUser> getUser(@PathVariable("userId") String userId){
+    public ResponseEntity<ResponseUser> getUser(@PathVariable("userId") String userId,
+                                                @RequestParam(value="page", required = false,defaultValue = "1") int page){
         UserDto userDto = userService.getUserByUserId(userId);
         ResponseUser responseUser = new ModelMapper().map(userDto,ResponseUser.class);
         return ResponseEntity.ok(responseUser);
