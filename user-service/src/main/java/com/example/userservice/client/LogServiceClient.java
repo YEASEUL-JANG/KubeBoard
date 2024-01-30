@@ -10,6 +10,6 @@ import java.util.*;
 public interface LogServiceClient {
 
     @GetMapping("/log-service/list/{userId}")
-    List<ResponseUserLog> getLogList(@PathVariable
+    ResponseUserLog getLogList(@PathVariable
                                   String userId);
 }

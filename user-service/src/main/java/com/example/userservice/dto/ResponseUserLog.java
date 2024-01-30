@@ -1,14 +1,19 @@
 package com.example.userservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
+
 @Data
-    public class ResponseUserLog {
-        private String userId;
-        private String requestData;
-        private String requestMs;
-        private String requestSource;
-        private Integer requestNum;
-        private Date requestedTime;
+@JsonInclude(JsonInclude.Include.NON_NULL) //json 데이터에서 null 값은 제외시킴
+public class ResponseUserLog {
+    private List<ResponseUserLogData> userLogDataList;
+    private int logCount;
+
+    public ResponseUserLog(List<ResponseUserLogData> userLogDataList, int logCount) {
+        this.userLogDataList = userLogDataList;
+        this.logCount = logCount;
+    }
 }

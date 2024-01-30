@@ -77,9 +77,8 @@ public class UserServiceImpl implements UserService {
         /* CircuitBreaker*/
         log.info("Before call log microservice");
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitbreaker");
-        List<ResponseUserLog> logList = circuitBreaker.run(() -> logServiceClient.getLogList(userId),
-                throwable -> new ArrayList<>());
-        //List<ResponseUserLog> logList = logServiceClient.getLogList(userId);
+        ResponseUserLog logList = circuitBreaker.run(() -> logServiceClient.getLogList(userId),
+                throwable -> new ResponseUserLog(new ArrayList<>(),0));
         log.info("After called log microservice");
         userDto.setLogs(logList);
         return userDto;

@@ -44,22 +44,29 @@
             <td>{{ log.requestMs }}</td>
             <td>{{ log.requestSource }}</td>
             <td>{{ log.requestNum }}</td>
-            <td>{{ log.requestAt }}</td>
+            <td>{{ log.requestedTime }}</td>
           </tr>
         </tbody>
       </table>
+        <template v-slot:pageSlot>
+            <Pagination :currentPage="currentPage"
+                        :numberOfPages="numberOfPages"
+                        @getList="loadUserInfo"/>
+        </template>
     </table-slot>
   </div>
 </template>
 <script>
-import { ref, onMounted } from 'vue'
+import {ref, onMounted, computed} from 'vue'
 import BaseSpinner from "@/ui/BaseSpinner.vue";
 import axios from "axios";
 import {useRoute} from "vue-router";
 import router from "@/router";
+import Pagination from "@/components/common/Pagination.vue";
 
 export default {
     components: {
+        Pagination,
         BaseSpinner,
     },
     setup() {
@@ -68,15 +75,22 @@ export default {
         const userLogList = ref([])
         const userInfo = ref({})
         const isLoading = ref(false)
+        const currentPage = ref(1);
+        const numberOflist = ref(0);
+        //총 페이지 수 계산
+        const numberOfPages = computed(() => {
+            return Math.ceil((numberOflist.value / 5));
+        });
 
         const loadUserInfo = async() => {
             isLoading.value = true
                 try {
                     const {data} = await axios.get(
-                        `/user-service/users/${userId}`);
+                        `/user-service/users/${userId}?page=${currentPage.value}`);
                     console.log("userInfo :", data)
                     userInfo.value = data;
-                    userLogList.value = data.logs;
+                    userLogList.value = data.logs.userLogDataList;
+                    numberOfPages.value =data.logs.logCount;
                 } catch (err) {
                     console.log(err);
                 } finally {
@@ -97,6 +111,9 @@ export default {
             isLoading,
             moveList,
             userLogList,
+            loadUserInfo,
+            currentPage,
+            numberOfPages
         }
     },
 }

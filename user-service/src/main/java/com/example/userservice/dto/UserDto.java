@@ -11,5 +11,5 @@ public class UserDto {
     private String pwd;
     private String userId;
     private Date createdAt;
-    private List<ResponseUserLog> logs;
+    private ResponseUserLog logs;
 }

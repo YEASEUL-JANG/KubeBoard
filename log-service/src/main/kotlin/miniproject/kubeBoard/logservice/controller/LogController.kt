@@ -29,9 +29,11 @@ class LogController (
     fun getLogList(
             @PathVariable("userId") userId:String,
             @RequestParam(value = "page", required = false, defaultValue = "1") page: Int
-    ): List<ResponseUserLog> {
+    ): ResponseUserLog {
         val offset= (page-1)*5
         val sublist=5*page
-        return logService.getUserLog(userId,offset,sublist);
+        val userLogList = logService.getUserLog(userId, offset, sublist);
+        val logCount = logService.getLogCount(userId);
+        return ResponseUserLog(logCount,userLogList);
     }
 }
