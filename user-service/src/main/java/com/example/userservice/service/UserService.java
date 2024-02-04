@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 public interface UserService extends UserDetailsService {
     UserDto createUser(UserDto userDto);
-    UserDto getUserByUserId(String userId);
+    UserDto getUserByUserId(String userId, int page);
     Iterable<UserEntity> getUserByAll();
     UserDto getUserDetailsByUserId(String userId);
     int duplicateUser(String userId);

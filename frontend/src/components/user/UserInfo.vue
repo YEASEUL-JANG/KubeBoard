@@ -57,7 +57,7 @@
   </div>
 </template>
 <script>
-import {ref, onMounted, computed} from 'vue'
+import {ref, onMounted, computed, provide} from 'vue'
 import BaseSpinner from "@/ui/BaseSpinner.vue";
 import axios from "axios";
 import {useRoute} from "vue-router";
@@ -81,16 +81,21 @@ export default {
         const numberOfPages = computed(() => {
             return Math.ceil((numberOflist.value / 5));
         });
+        const setLoading = () => {
+            isLoading.value = true;
+        }
+        provide('setLoading', setLoading);
 
-        const loadUserInfo = async() => {
-            isLoading.value = true
+
+        const loadUserInfo = async(page = currentPage.value) => {
+            currentPage.value = page;
                 try {
                     const {data} = await axios.get(
                         `/user-service/users/${userId}?page=${currentPage.value}`);
                     console.log("userInfo :", data)
                     userInfo.value = data;
                     userLogList.value = data.logs.userLogDataList;
-                    numberOfPages.value =data.logs.logCount;
+                    numberOflist.value =data.logs.logCount;
                 } catch (err) {
                     console.log(err);
                 } finally {
@@ -103,7 +108,7 @@ export default {
             loadUserInfo()
         })
         const moveList = () =>{
-            router.push('/pod');
+            router.push('/');
         }
 
         return {
@@ -113,7 +118,7 @@ export default {
             userLogList,
             loadUserInfo,
             currentPage,
-            numberOfPages
+            numberOfPages,
         }
     },
 }

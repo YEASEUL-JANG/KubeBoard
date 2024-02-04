@@ -13,6 +13,6 @@ public class ResponseUser {
     private String userId;
     private String createdAt;
 
-    private List<ResponseUserLog> logs;
+    private ResponseUserLog logs;
 
 }

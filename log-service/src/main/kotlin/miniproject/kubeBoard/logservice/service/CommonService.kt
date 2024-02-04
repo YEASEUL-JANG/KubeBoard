@@ -20,7 +20,7 @@ class CommonService (){
         }
 
         fun translateForm(time: String): String {
-            val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")
             val date = LocalDateTime.parse(time,dateTimeFormatter).atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.of("Asia/Seoul"))
             return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         }

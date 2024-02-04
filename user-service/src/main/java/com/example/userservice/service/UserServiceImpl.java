@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserByUserId(String userId) {
+    public UserDto getUserByUserId(String userId, int page) {
         UserEntity userEntity = userRepository.findByUserId(userId);
         if(userEntity == null){
             throw new UsernameNotFoundException("User not found");
@@ -77,8 +77,9 @@ public class UserServiceImpl implements UserService {
         /* CircuitBreaker*/
         log.info("Before call log microservice");
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitbreaker");
-        ResponseUserLog logList = circuitBreaker.run(() -> logServiceClient.getLogList(userId),
+        ResponseUserLog logList = circuitBreaker.run(() -> logServiceClient.getLogList(userId, page),
                 throwable -> new ResponseUserLog(new ArrayList<>(),0));
+        log.info("logList : "+ logList.toString());
         log.info("After called log microservice");
         userDto.setLogs(logList);
         return userDto;
