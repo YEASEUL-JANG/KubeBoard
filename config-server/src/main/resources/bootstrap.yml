@@ -3,6 +3,6 @@ encrypt:
   key-store:
     #location: file://${user.home}/Documents/SideProject/kubeBoard/keystore/apiEncryptionKey.jks
     #location: file:///C:/STUDY/KubeBoard/keystore/apiEncryptionKey.jks
-    locaation: file:/apiEncrytionKey.jks
+    location: file:/apiEncryptionKey.jks
     password: test1234
     alias: apiEncryptionKey
