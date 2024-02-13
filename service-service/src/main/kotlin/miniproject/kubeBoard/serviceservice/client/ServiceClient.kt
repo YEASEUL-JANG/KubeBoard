@@ -26,7 +26,7 @@ class ServiceClient(
     }
 
     fun getServiceStatus(namespace: String, serviceName: String): Boolean {
-        val service = client.services().inNamespace(namespace).withName(serviceName).get() ?: return false
+        //val service = client.services().inNamespace(namespace).withName(serviceName).get() ?: return false
         val endpoints = client.endpoints().inNamespace(namespace).withName(serviceName).get() ?: return false
 
         return endpoints.subsets.any { subset ->
