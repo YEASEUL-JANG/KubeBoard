@@ -20,7 +20,9 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: '*'
+            allowedOrigins:
+              - "http://localhost:8081"
+              - "http://kubeboard-front:80"
             allow-credentials: true
             allowedHeaders: '*'
             allowedMethods:

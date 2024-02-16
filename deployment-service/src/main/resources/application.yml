@@ -42,5 +42,5 @@ management:
 
 
 kafka:
-  #  server: 127.0.0.1:9092
-  server: 172.18.0.10:9092
+  server: 127.0.0.1:9092
+  #server: 172.18.0.10:9092

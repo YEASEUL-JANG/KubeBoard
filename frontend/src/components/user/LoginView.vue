@@ -35,6 +35,7 @@ export default {
     components: { LoginForm },
 
     setup() {
+      console.log("process.env.VUE_APP_URI" +process.env.VUE_APP_URI)
         const loginSuccess = ref(false);
         const userId = ref("");
         const pwd = ref("");

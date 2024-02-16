@@ -19,5 +19,5 @@ app.mount('#app');
 
 app.config.globalProperties.$axios = axios;
 
-axios.defaults.baseURL = "http://192.168.49.10:8000/"
+axios.defaults.baseURL = process.env.VUE_APP_URI;
 axios.defaults.headers.common["AUTHORIZATION"] = store.getters.getToken;

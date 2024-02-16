@@ -15,7 +15,7 @@ class PodData(
     val podName: String,
     val namespace: String,
     val phase: String,
-    val podIp: String,
+    val podIp: String?,
     val createdTime: String,
     val nodeName: String,
     val labels: String,
