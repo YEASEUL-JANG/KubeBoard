@@ -149,7 +149,8 @@ export default {
                 });
                 if (data) {
                     createLoading.value = false;
-                    window.location.reload();
+                    // window.location.reload();
+                  router.go(0)
                 }else{
                     alert("생성실패")
                     createLoading.value = false;
@@ -173,7 +174,8 @@ export default {
                     if (data) {
                         deleteLoading[name] = false
                         alert("삭제가 완료되었습니다.")
-                        window.location.reload();
+                        // window.location.reload();
+                       router.go(0)
                     }else{
                         deleteLoading[name] = false
                         alert("삭제 실패")

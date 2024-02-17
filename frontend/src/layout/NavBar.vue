@@ -44,9 +44,10 @@
 
 <script>
 import {computed, onMounted, ref} from 'vue';
-import {useRoute, useRouter} from "vue-router";
+import {useRoute} from "vue-router";
 import store from "@/store/store";
 import axios from "axios";
+import router from "@/router";
 
 export default {
     name: 'NavBar',
@@ -54,7 +55,6 @@ export default {
     setup() {
         const searchInput = ref('');
         const route = useRoute();
-        const router = useRouter();
         const search = () => {
             if(searchInput.value !== '') {
                 router.push({
@@ -83,7 +83,7 @@ export default {
                 })
             await alert("로그아웃 되었습니다.")
             await store.dispatch('logout');
-            location.href = '/login';
+            await router.push('/login');
         };
 
         /**

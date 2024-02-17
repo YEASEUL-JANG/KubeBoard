@@ -69,11 +69,12 @@
 <script>
 import axios from "axios";
 import {computed, onMounted, provide, reactive, ref} from "vue";
-import {useRoute, useRouter} from 'vue-router';
+import {useRoute} from 'vue-router';
 import LabelList from '../common/LabelList.vue';
 import Pagination from "@/components/common/Pagination.vue";
 import CreateModal from "@/components/common/CreateModal.vue";
 import store from "@/store/store";
+import router from "@/router";
 export default {
   components: {
       CreateModal,
@@ -82,7 +83,6 @@ export default {
   },
     setup() {
         const items = ref([]);
-        const router = useRouter();
         const route = useRoute();
         const limit = 5;
         const numberOflist = ref(0);
@@ -145,7 +145,8 @@ export default {
                 });
                 if (data) {
                     createLoading.value = false;
-                    window.location.reload();
+                    // window.location.reload();
+                  router.go(0)
                 }else{
                     alert("생성실패")
                     createLoading.value = false;

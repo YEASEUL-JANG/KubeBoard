@@ -3,3 +3,5 @@ spring:
     config:
       uri: http://127.0.0.1:8888
       name: application
+  profiles: #읽을 config 파일 정보 설정
+    active: dev
