@@ -144,12 +144,14 @@
 <!-- Pages -->
 ## Pages
 
+
 ### MainPage
 <figure>
     <img src="frontend/src/assets/images/mainPage.png" alt="MainPage"
   width="700" height="500" >
   <figcaption>파드와 디플로이먼트의 현재 실행상태를 차트화, 서비스 데이터를 테이블로 나타냄</figcaption>
 </figure>
+
 
 ### ListPage
 <img src="frontend/src/assets/images/podList.png" alt="podList"
@@ -159,12 +161,14 @@
   <img src="frontend/src/assets/images/serviceList.png" alt="serviceList"
   width="700" height="300" >
 
+
 ### DetailListPage
 <figure>
     <img src="frontend/src/assets/images/detailPage.png" alt="DetailPage"
   width="700" height="500" >
   <figcaption>상세페이지 예시</figcaption>
 </figure>
+
 
 ### MYPAGE
 <figure>
@@ -173,22 +177,24 @@
   <figcaption>개인 정보 및 활동기록</figcaption>
 </figure>
 
+
 ### CreateModal
 <figure>
     <img src="frontend/src/assets/images/podCreate.png" alt="DetailPage"
-  width="700" height="400" >
+  width="700" height="300" >
   <figcaption>파드 생성</figcaption>
 </figure>
 <figure>
     <img src="frontend/src/assets/images/deplCreate.png" alt="DetailPage"
-  width="700" height="400" >
+  width="700" height="300" >
   <figcaption>디플로이먼트 생성</figcaption>
 </figure>
 <figure>
     <img src="frontend/src/assets/images/serviceCreate.png" alt="DetailPage"
-  width="700" height="400" >
+  width="700" height="300" >
   <figcaption>서비스 생성</figcaption>
 </figure>
+
 
 
 ### Replica Scailing Modal
