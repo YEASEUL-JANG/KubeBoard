@@ -10,7 +10,7 @@
   <h3 align="center">Kube Board</h3>
 
   <p align="center">
-    ⚙️ k8s client APi를 통해 k8s 상태를 조회할 수 있는 웹페이지
+    ⚙️ k8s client APi를 통해 k8s 자원을 관리할 수 있는 웹페이지
    </p>
 </div>
 
@@ -39,6 +39,7 @@
 ## About The Project
 <p>
 💡 ‘KubeBoard’ 는 로컬 쿠버네티스 클러스터 환경을 UI상에서 쉽게 조회할 수 있는 K8S Dashboard 입니다.</p><p>
+💡 각 서비스를 Microservices Architecture(MSA) 프로젝트로 구성하여 독립적인 단위로 개발/관리가 가능하도록 했습니다.</p><p>
 💡 Kubernetes 클러스터 환경에서의 Pod, Deployment, Service 에 대한 생성/삭제/조회가 가능합니다.
 </p>
 
@@ -133,9 +134,8 @@
 - [x] DB 구조 설계 (JPA)
 - [x] QuaryDSL을 활용한 다중 검색기능
 - [x] SpringConfig 를 통한 서비스 구성정보 중앙 별도 관리
-- [x] Kafka 및 메시지 큐(RabbitMQ)를 통한 메시지 기반 비동기 통신
+- [x] Kafka를 통한 메시지 기반 비동기 통신
 - [x] Circuit Breaker를 활용한 장애발생 예방
-- [x] Prometheus/Grafana를 통한 시스템 모니터링 및 메트릭 수집
 - [x] Docker Image 빌드를 통한 각 마이크로서비스 도커 배포 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -211,7 +211,7 @@
 <!-- CONTACT -->
 ## Contact
 
-- YouTube Link: [https://youtu.be/m2Sl8aQ8Fg0](https://youtu.be/m2Sl8aQ8Fg0) 
+- YouTube Link: [https://youtu.be/m2Sl8aQ8Fg0](https://youtu.be/OW03DGPwbpw?si=2mGGHfPDOLGARDhy](https://youtu.be/OW03DGPwbpw?si=2mGGHfPDOLGARDhy) 
 - Project Link: [https://github.com/YEASEUL-JANG/KubeBoard](https://github.com/YEASEUL-JANG/KubeBoard)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
