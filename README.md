@@ -73,22 +73,15 @@
 
 
 
-### Built With
+## Built With
 
-사용된 frameworks,Tools 및 libraries 입니다. 
+| Category        | Stack                                                                 |
+|-----------------|-----------------------------------------------------------------------|
+| **Languages**   | Kotlin, Java, JavaScript, HTML/CSS                                    |
+| **Frontend**    | Vue3, Bootstrap                                                       |
+| **Backend**     | Spring Boot, Spring Cloud, Kafka, JPA (Querydsl), Quartz Batch        |
+| **Tool/DevOps** | Minikube, Docker, IntelliJ, MySQL Workbench, GitHub, Circuit Breaker  |
 
-* ![SpringBoot][SpringBoot]
-* ![SpringCloud][SpringCloud]
-* ![Kafka][Kafka]
-* ![CircuitBreaker][CircuitBreaker]
-* ![Kotlin][Kotlin]
-* ![JPA][JPA]
-* ![Vue3][Vue3]
-* ![JavaScript][JavaScript]
-* ![Quartz][Quartz]
-* ![Minikube][Minikube]
-* ![Docker][Docker]
-* ![Bootstrap][Bootstrap]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -167,7 +160,7 @@
 </figure>
 
 
-### MYPAGE
+### MYPAGE
 <figure>
     <img src="frontend/src/assets/images/logPage.png" alt="LogPage"
   width="700" height="500" >
@@ -175,7 +168,7 @@
 </figure>
 
 
-### CreateModal
+### CreateModal
 <figure>
     <img src="frontend/src/assets/images/podCreate.png" alt="DetailPage"
   width="700" height="300" >
@@ -214,20 +207,12 @@
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-<!-- MARKDOWN LINKS & IMAGES -->
-[Vue3]: https://img.shields.io/badge/Vue3-20B2AA?style=for-the-badge
-[SpringBoot]: https://img.shields.io/badge/SpringBoot-green?style=for-the-badge
-[Kotlin]: https://img.shields.io/badge/Kotlin-orange?style=for-the-badge
-[rabbitMQ]: https://img.shields.io/badge/rabbitMQ-pink?style=for-the-badge
-[JPA]: https://img.shields.io/badge/JPA-red?style=for-the-badge
-[Kafka]: https://img.shields.io/badge/Kafka-blue?style=for-the-badge
-[Minikube]: https://img.shields.io/badge/Minikube-blue?style=for-the-badge
-[Docker]: https://img.shields.io/badge/Docker-Docker?style=for-the-badge
-[JavaScript]: https://img.shields.io/badge/JavaScript-yellow?style=for-the-badge
-[Quartz]: https://img.shields.io/badge/Quartz-000000?style=for-the-badge
-[Bootstrap]: https://img.shields.io/badge/Bootstrap-purple?style=for-the-badge
-[SpringConfig]: https://img.shields.io/badge/SpringConfig-green?style=for-the-badge
-[SpringCloud]: https://img.shields.io/badge/SpringCloud-green?style=for-the-badge 
-[CircuitBreaker]: https://img.shields.io/badge/CircuitBreaker-orange?style=for-the-badge
-[Prometheus]: https://img.shields.io/badge/Prometheus-sky?style=for-the-badge
-[Grafana]: https://img.shields.io/badge/Grafana-brown?style=for-the-badge
+## 💡 알게된 점
+
+- JPA와 QueryDSL을 활용해 객체지향적인 데이터베이스 설계 및 복잡한 검색 조건을 효율적으로 처리하는 방법을 습득.
+- Spring Config를 통한 중앙 집중식 구성 관리의 필요성을 이해하고, 서비스 가용성과 유연성을 높이기 위한 설계 방식 적용.
+- 메시지 큐 시스템의 작동원리를 알고 Kafka를 통한 비동기 통신을 통해 실시간 로그데이터를 축적하는 기능을 구현.
+- Circuit Breaker 패턴을 적용하여 서비스의 장애를 사전에 예방함.
+- Kubernetes 의 기본적인 오브젝트 및 리소스 관리를 학습하고 이를 API를 통해 프로그래밍적으로 제어하는 방법을 익힘.
+- [Docker를 직접 활용하여 마이크로서비스를 컨테이너화하고, 배포 및 운영 효율성을 높이는 실습을 수행.](https://www.notion.so/_kubeboard-7abafd93a8ff453db81605e037d05eea?pvs=21)
+
